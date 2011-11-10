@@ -317,6 +317,34 @@ setMacFileNamed: fileName type: typeString creator: creatorString
 ! !
 
 
+!FileDirectory methodsFor: 'version control' stamp: 'JM 11/10/2011 12:13'!
+fileInContents
+	"Given a directory with files named like '1-Object.st', files in all .st files in numerical order"
+
+	| filesToFileIn filesInOrder index |
+
+	"Grab the names of all files that look like they can be filed in"
+	filesToFileIn _ self fileNamesMatching: '*.st'.
+
+	"File in classes based in the order corresponding to the number in front of the file name
+	(so that base classes are filed in before subclasses)"
+
+	filesInOrder _ filesToFileIn asSortedCollection sortBlock: [:a :b | a asNumber < b asNumber].
+
+	index _ 1.
+	'Importing source code ...' 
+		displayProgressAt: Sensor cursorPoint 
+		from: 1 to: filesInOrder size
+		during: [:bar |
+			filesInOrder do: [:name | 
+				CrLfFileStream fileIn: (self fullNameFor: name). 
+				bar value: index.
+				index _ index + 1]].
+
+
+
+! !
+
 !FileDirectory methodsFor: 'version control' stamp: 'JM 11/9/2011 17:15'!
 fileOutClassesChangedSince: aDate
 

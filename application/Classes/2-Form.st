@@ -2363,7 +2363,7 @@ privateOffset
 	^ offset
 ! !
 
-!Form methodsFor: 'private' stamp: '6/9/97 16:10 di'!
+!Form methodsFor: 'private' stamp: 'di 6/9/97 16:10'!
 setExtent: extent depth: bitsPerPixel
 	"Create a virtual bit map with the given extent and bitsPerPixel."
 

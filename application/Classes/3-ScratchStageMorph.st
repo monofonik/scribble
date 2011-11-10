@@ -3,7 +3,7 @@ ScriptableScratchMorph subclass: #ScratchStageMorph
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Scratch-Objects'!
-!ScratchStageMorph commentStamp: 'jm 6/4/2004 14:17' prior: 0!
+!ScratchStageMorph commentStamp: '<historical>' prior: 0!
 I represent the background of the Scratch work pane. Like a sprite, I have a set of media and can change my costume. I also have my own scripts and variables. The main difference between me and a sprite is that I am fixed in position: I cannot move or rotate.
 !
 
@@ -1099,7 +1099,7 @@ createOrResizeTrailsForm
 		penTrailsForm _ newForm].
 ! !
 
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/9/2011 16:39'!
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/10/2011 13:55'!
 drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	"Draw a pen trail between the given points for the given morph using its pen size and color. The points are in Scratch coordinates (that is, 0@0 is the center of the work pane and y increases toward the top of the screen."
 	"The penTrailsForm is created on demand when the first pen is put down and removed (to save space) when pen trails are cleared."
@@ -1111,11 +1111,11 @@ drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	aMorph penSize ~= 1 ifTrue: [
 		pen roundNib: penSize.
 		pen sourceForm offset: nil].  "clear form offset"
-	pen color: (aMorph penColor alpha: 1 - (aMorph penGhosting / 100)).
+	pen color: (aMorph penColor alpha: 1.0 - (aMorph penGhosting / 100)).
 	offset _ (penTrailsForm extent - penSize) / 2.0.
 	p1 _ ((oldPoint * (1 @ -1)) + offset) rounded.
 	p2 _ ((newPoint * (1 @ -1)) + offset) rounded.
-	pen combinationRule: 31.
+	"pen combinationRule: 31."
 	pen drawFrom: p1 to: p2.
 	r _ ((p1 rect: p2) expandBy: penSize + 1) translateBy: self topLeft.
 	self invalidRect: r.
@@ -1832,7 +1832,7 @@ drawOn: aCanvas
 	penTrailsForm ifNotNil: [clipC translucentImage: penTrailsForm at: self position].
 ! !
 
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/9/2011 16:39'!
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/10/2011 13:55'!
 drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	"Draw a pen trail between the given points for the given morph using its pen size and color. The points are in Scratch coordinates (that is, 0@0 is the center of the work pane and y increases toward the top of the screen."
 	"The penTrailsForm is created on demand when the first pen is put down and removed (to save space) when pen trails are cleared."
@@ -1844,11 +1844,11 @@ drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	aMorph penSize ~= 1 ifTrue: [
 		pen roundNib: penSize.
 		pen sourceForm offset: nil].  "clear form offset"
-	pen color: (aMorph penColor alpha: 1 - (aMorph penGhosting / 100)).
+	pen color: (aMorph penColor alpha: 1.0 - (aMorph penGhosting / 100)).
 	offset _ (penTrailsForm extent - penSize) / 2.0.
 	p1 _ ((oldPoint * (1 @ -1)) + offset) rounded.
 	p2 _ ((newPoint * (1 @ -1)) + offset) rounded.
-	pen combinationRule: 31.
+	"pen combinationRule: 31."
 	pen drawFrom: p1 to: p2.
 	r _ ((p1 rect: p2) expandBy: penSize + 1) translateBy: self topLeft.
 	self invalidRect: r.

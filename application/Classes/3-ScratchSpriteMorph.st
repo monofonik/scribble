@@ -3,7 +3,7 @@ ScriptableScratchMorph subclass: #ScratchSpriteMorph
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Scratch-Objects'!
-!ScratchSpriteMorph commentStamp: 'jm 1/4/2006 12:39' prior: 0!
+!ScratchSpriteMorph commentStamp: '<historical>' prior: 0!
 I represent a programmable Scratch object.
 
 I have a costume, a bitmapped image that can be rotated, scaled, and image-filtered.

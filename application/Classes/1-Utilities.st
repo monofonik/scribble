@@ -3,7 +3,7 @@ Object subclass: #Utilities
 	classVariableNames: 'AuthorInitials AuthorName '
 	poolDictionaries: ''
 	category: 'System-Support'!
-!Utilities commentStamp: 'jm 10/5/2002 07:36' prior: 0!
+!Utilities commentStamp: '<historical>' prior: 0!
 A repository for general and miscellaneous utilities; much of what is here are in effect global methods that don't naturally attach to anything else. All the functionality is implemented as class messages.
 !
 

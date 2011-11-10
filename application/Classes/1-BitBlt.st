@@ -3,7 +3,7 @@ Object subclass: #BitBlt
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Graphics-Primitives'!
-!BitBlt commentStamp: 'jm 8/1/2008 20:22' prior: 0!
+!BitBlt commentStamp: '<historical>' prior: 0!
 I represent a block transfer (BLT) of pixels into a rectangle (destX, destY, width, height) of the destinationForm.  The source of pixels may be a similar rectangle (at sourceX, sourceY) in the sourceForm, or a constant color, currently called halftoneForm.  If both are specified, their pixel values are combined with a logical AND function prior to transfer.  In any case, the pixels from the source are combined with those of the destination by as specified by the combinationRule.
 
 The combination rule whose value is 0 through 15 programs the transfer to produce 1 or 0 according to its 4-bit representation as follows:
@@ -173,7 +173,7 @@ destY: anInteger
 
 	destY _ anInteger! !
 
-!BitBlt methodsFor: 'accessing' stamp: 'JM 11/9/2011 16:40'!
+!BitBlt methodsFor: 'accessing' stamp: 'JM 11/10/2011 12:41'!
 drawFrom: startPoint to: stopPoint withFirstPoint: drawFirstPoint
 	"Draw a line whose end points are startPoint and stopPoint.
 	The line is formed by repeatedly calling copyBits at every
@@ -199,11 +199,11 @@ drawFrom: startPoint to: stopPoint withFirstPoint: drawFirstPoint
 	"Note that if not forwards, then the first point is the last and vice versa.
 	We agree to always paint stopPoint, and to optionally paint startPoint."
 	(drawFirstPoint or: [forwards == false  "ie this is stopPoint"])
-		ifTrue: [self copyBitsTranslucent: 100].
+		ifTrue: [self copyBits].
 	self drawLoopX: (point2 x - point1 x) rounded 
 				  Y: (point2 y - point1 y) rounded.
 	(drawFirstPoint or: [forwards  "ie this is stopPoint"])
-		ifTrue: [self copyBitsTranslucent: 100].
+		ifTrue: [self copyBits ].
 ! !
 
 !BitBlt methodsFor: 'accessing'!

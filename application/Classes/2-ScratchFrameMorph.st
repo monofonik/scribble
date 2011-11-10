@@ -3,7 +3,7 @@ Morph subclass: #ScratchFrameMorph
 	classVariableNames: 'AllowSharing Clipboard DefaultNotes DefaultSprite Fonts FontsXO IsXO ScratchServers ScratchSkin ScratchSkinXO ShareServer ShareServerPath SupportServer SupportServerPath TakeOverScreen UseErrorCatcher Version VersionDate VisibleDrives WorkpaneExtent '
 	poolDictionaries: ''
 	category: 'Scratch-UI-Panes'!
-!ScratchFrameMorph commentStamp: 'jm 7/20/2003 14:21' prior: 0!
+!ScratchFrameMorph commentStamp: '<historical>' prior: 0!
 I am the top level user interface for Scratch. I tile the screen with a toolbar, a work pane (for content), a viewer pane, and a script editor pane. I can resize myself to fill the entire Squeak window.
 
 I keep a list of Scratch processes (threads) and run each one to the its next stopping point when I am stepped each screen update cycle.
@@ -1264,6 +1264,15 @@ uniqueSummaryFileName
 	^ fileName
 
 ! !
+
+!ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'JM 11/10/2011 11:13'!
+updateInterfaceSkin
+
+	"Reads in the latest skin from the ScratchSkin folder and updates the UI appearance."
+
+	self class readSkinFrom: (FileDirectory default directoryNamed: 'ScratchSkin').
+	"self rebuildUIForNewLanguage."
+	ScratchTranslator updateScratchUI.! !
 
 !ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'jm 6/14/2007 17:07'!
 writeMultipleSummaries
@@ -4941,7 +4950,7 @@ Note: this is a compatibility force method for BYOB - jens"
 	^ proj
 ! !
 
-!ScratchFrameMorph methodsFor: '-- all --' stamp: 'JM 11/9/2011 17:10'!
+!ScratchFrameMorph methodsFor: '-- all --' stamp: 'JM 11/10/2011 11:13'!
 fileMenu: aMenuTitleMorph
 
 	| menu |
@@ -4961,6 +4970,7 @@ fileMenu: aMenuTitleMorph
 		menu add: 'Write Project Summary' action: #writeSummaryFile.
 		menu add: 'Write Multiple Project Summaries' action: #writeMultipleSummaries].
 "		menu addLine.
+		menu add: 'Update interface skin' action: #updateInterfaceSkin.
 		menu add: 'Import from version control' action: #versionControlImport.
 		menu add: 'Export to version control' action: #versionControlExport.
 	].
@@ -7202,6 +7212,15 @@ updateHistoryProjectName: projName op: operation
 		ifNotNil: [projectInfo at: 'penTrails' put: workPane penTrailsForm].
 
 ! !
+
+!ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'JM 11/10/2011 11:13'!
+updateInterfaceSkin
+
+	"Reads in the latest skin from the ScratchSkin folder and updates the UI appearance."
+
+	self class readSkinFrom: (FileDirectory default directoryNamed: 'ScratchSkin').
+	"self rebuildUIForNewLanguage."
+	ScratchTranslator updateScratchUI.! !
 
 !ScratchFrameMorph methodsFor: 'file read/write' stamp: 'jm 3/28/2007 12:43'!
 updateLastHistoryEntryIfNeeded
