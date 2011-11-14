@@ -1080,7 +1080,7 @@ clearPenTrails
 	self changed.
 ! !
 
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/9/2011 11:47'!
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/14/2011 11:39'!
 createOrResizeTrailsForm
 	"If necessary, create a new penTrailsForm or resize the existing one to fill my bounds. On return, penTrailsForm will be a Form of the correct size."
 
@@ -1099,7 +1099,23 @@ createOrResizeTrailsForm
 		penTrailsForm _ newForm].
 ! !
 
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/10/2011 13:55'!
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/14/2011 12:16'!
+drawCircleFor: aSprite radius: aNumber
+
+	| o d circle |
+
+	self createOrResizeTrailsForm.
+	o _ 	aSprite referencePosition + ScratchOrigin.
+	d _ aNumber@aNumber * 2.
+
+	circle _ FormCanvas on: penTrailsForm.
+	circle fillOval: (Rectangle origin: o corner: d) color: Color red borderWidth: 2 borderColor: Color black.
+
+	Transcript show: o; cr.
+	Transcript show: d; cr.
+	Transcript show: ScratchOrigin.! !
+
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/10/2011 14:20'!
 drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	"Draw a pen trail between the given points for the given morph using its pen size and color. The points are in Scratch coordinates (that is, 0@0 is the center of the work pane and y increases toward the top of the screen."
 	"The penTrailsForm is created on demand when the first pen is put down and removed (to save space) when pen trails are cleared."
@@ -1115,8 +1131,8 @@ drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	offset _ (penTrailsForm extent - penSize) / 2.0.
 	p1 _ ((oldPoint * (1 @ -1)) + offset) rounded.
 	p2 _ ((newPoint * (1 @ -1)) + offset) rounded.
-	"pen combinationRule: 31."
-	pen drawFrom: p1 to: p2.
+	pen combinationRule: 24.
+	pen drawFrom: p1 to: p2 withFirstPoint: false.
 	r _ ((p1 rect: p2) expandBy: penSize + 1) translateBy: self topLeft.
 	self invalidRect: r.
 ! !
@@ -1749,7 +1765,7 @@ costumeChanged
 	self changed.
 ! !
 
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/9/2011 11:47'!
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/14/2011 11:39'!
 createOrResizeTrailsForm
 	"If necessary, create a new penTrailsForm or resize the existing one to fill my bounds. On return, penTrailsForm will be a Form of the correct size."
 
@@ -1810,6 +1826,22 @@ deleteTerminatedClones
 		isRunning ifFalse: [clone delete]].
 ! !
 
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/14/2011 12:16'!
+drawCircleFor: aSprite radius: aNumber
+
+	| o d circle |
+
+	self createOrResizeTrailsForm.
+	o _ 	aSprite referencePosition + ScratchOrigin.
+	d _ aNumber@aNumber * 2.
+
+	circle _ FormCanvas on: penTrailsForm.
+	circle fillOval: (Rectangle origin: o corner: d) color: Color red borderWidth: 2 borderColor: Color black.
+
+	Transcript show: o; cr.
+	Transcript show: d; cr.
+	Transcript show: ScratchOrigin.! !
+
 !ScratchStageMorph methodsFor: 'drawing' stamp: 'JM 11/8/2011 16:41'!
 drawOn: aCanvas
 	"Draw myself if my visibility is > 0. If my visibility is 1, draw using the normal 'paint' mode. Otherwise, draw using 'alpha' resulting in a partially transparent rendering."
@@ -1832,7 +1864,7 @@ drawOn: aCanvas
 	penTrailsForm ifNotNil: [clipC translucentImage: penTrailsForm at: self position].
 ! !
 
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/10/2011 13:55'!
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/10/2011 14:20'!
 drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	"Draw a pen trail between the given points for the given morph using its pen size and color. The points are in Scratch coordinates (that is, 0@0 is the center of the work pane and y increases toward the top of the screen."
 	"The penTrailsForm is created on demand when the first pen is put down and removed (to save space) when pen trails are cleared."
@@ -1848,8 +1880,8 @@ drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	offset _ (penTrailsForm extent - penSize) / 2.0.
 	p1 _ ((oldPoint * (1 @ -1)) + offset) rounded.
 	p2 _ ((newPoint * (1 @ -1)) + offset) rounded.
-	"pen combinationRule: 31."
-	pen drawFrom: p1 to: p2.
+	pen combinationRule: 24.
+	pen drawFrom: p1 to: p2 withFirstPoint: false.
 	r _ ((p1 rect: p2) expandBy: penSize + 1) translateBy: self topLeft.
 	self invalidRect: r.
 ! !

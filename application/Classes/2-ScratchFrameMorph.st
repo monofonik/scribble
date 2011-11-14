@@ -3356,7 +3356,7 @@ developersMenu
 	menu invokeOn: self.
 ! !
 
-!ScratchFrameMorph methodsFor: 'buttonActions' stamp: 'jens 9/2/2010 14:41'!
+!ScratchFrameMorph methodsFor: 'buttonActions' stamp: 'JM 11/14/2011 16:13'!
 newScratchProject
 	"Make a new, blank Scratch project."
 
@@ -3378,6 +3378,8 @@ newScratchProject
 	newProject _ ScratchStageMorph new.
 	sprite _ ScratchFrameMorph defaultSprite fullCopy.
 	sprite position: (240@180) - sprite extent.
+	sprite position: (240@180) - sprite extent.
+	sprite costume rotationCenter: 3@43.
 	newProject addMorph: sprite.
 	self installNewProject: newProject.
 	sprite installGlobalBlocks.
@@ -3702,13 +3704,14 @@ showPause
 		overForm: (ScratchFrameMorph skinAt: 'pauseButtonGrayPressed' asSymbol)
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 5/19/2010 03:39'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 11/10/2011 14:01'!
 showPlay
 
-	pauseButton
+"	pauseButton
 		onForm: (ScratchFrameMorph skinAt: 'playButtonGrayPressed' asSymbol)
 		offForm: (ScratchFrameMorph skinAt: 'playButtonGray'asSymbol)
 		overForm: (ScratchFrameMorph skinAt: 'playButtonGrayPressed' asSymbol)
+"
 ! !
 
 !ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 4/21/2010 00:37'!
@@ -5738,7 +5741,7 @@ nameFromFileName: fileName
 
 ! !
 
-!ScratchFrameMorph methodsFor: 'buttonActions' stamp: 'jens 9/2/2010 14:41'!
+!ScratchFrameMorph methodsFor: 'buttonActions' stamp: 'JM 11/14/2011 16:13'!
 newScratchProject
 	"Make a new, blank Scratch project."
 
@@ -5760,6 +5763,8 @@ newScratchProject
 	newProject _ ScratchStageMorph new.
 	sprite _ ScratchFrameMorph defaultSprite fullCopy.
 	sprite position: (240@180) - sprite extent.
+	sprite position: (240@180) - sprite extent.
+	sprite costume rotationCenter: 3@43.
 	newProject addMorph: sprite.
 	self installNewProject: newProject.
 	sprite installGlobalBlocks.
@@ -6766,13 +6771,14 @@ showPause
 		overForm: (ScratchFrameMorph skinAt: 'pauseButtonGrayPressed' asSymbol)
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 5/19/2010 03:39'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 11/10/2011 14:01'!
 showPlay
 
-	pauseButton
+"	pauseButton
 		onForm: (ScratchFrameMorph skinAt: 'playButtonGrayPressed' asSymbol)
 		offForm: (ScratchFrameMorph skinAt: 'playButtonGray'asSymbol)
 		overForm: (ScratchFrameMorph skinAt: 'playButtonGrayPressed' asSymbol)
+"
 ! !
 
 !ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'jm 10/31/2006 20:59'!

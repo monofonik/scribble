@@ -336,6 +336,14 @@ clearPenTrails
 		ifNotNil: [m clearPenTrails].
 ! !
 
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/14/2011 11:50'!
+drawCircle: aRadius
+
+	| stage |
+
+	(stage _	self ownerThatIsA: ScratchStageMorph) ifNil: [ ^ self ].
+	^ stage drawCircleFor: self radius: aRadius! !
+
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'jens 2/10/2011 00:22'!
 penColor
 
@@ -2237,7 +2245,7 @@ penShade
 ScratchSpriteMorph class
 	instanceVariableNames: ''!
 
-!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/9/2011 16:09'!
+!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/14/2011 11:19'!
 blockSpecs
 
 	| blocks |
@@ -2269,6 +2277,7 @@ blockSpecs
 			-
 			('pen down'						-	putPenDown)
 			('pen up'						-	putPenUp)
+			('pen down?'					b	penDown)
 			-
 			('set pen color to %c'			-	penColor:)
 			('change pen color by %n'		-	changePenHueBy:)
@@ -2283,6 +2292,15 @@ blockSpecs
 			('change pen size by %n'		-	changePenSizeBy: 1)
 			('set pen size to %n'				-	penSize: 1)
 			-
+			('circle radius %n'				-	drawCircle:)
+			('rectangle %n by %n'			-	drawRectangle:by:)
+			('triangle %n by %n by %n'		-	drawTriangle:by:by:)
+			-
+			('change fill color by: %n'		-	changeFillHueBy:)
+			('set fill color to %c'				-	fillColor:)
+			-
+			('change fill ghosting by: %n'	-	changeFillGhostingBy:)
+			('set fill ghosting to: %n'		-	setFillGhostingTo:)
 			('stamp'							-	stampCostume)
 	).
 
@@ -2339,7 +2357,7 @@ blockSpecs
 			('sensor %h?'					b	sensorPressed: 'button pressed')
 			=
 			('object %m'						r	getObject:)
-			('attribute %a'						r	get:)
+			('attribute %a'					r	get:)
 
 		).
 
