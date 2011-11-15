@@ -1099,21 +1099,18 @@ createOrResizeTrailsForm
 		penTrailsForm _ newForm].
 ! !
 
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/14/2011 12:16'!
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/15/2011 15:44'!
 drawCircleFor: aSprite radius: aNumber
 
 	| o d circle |
 
 	self createOrResizeTrailsForm.
-	o _ 	aSprite referencePosition + ScratchOrigin.
 	d _ aNumber@aNumber * 2.
-
+	o _ (aSprite referencePosition x + 240 - (d x / 2 rounded))@(180 - aSprite referencePosition y - (d y / 2 rounded)).
+	
 	circle _ FormCanvas on: penTrailsForm.
-	circle fillOval: (Rectangle origin: o corner: d) color: Color red borderWidth: 2 borderColor: Color black.
-
-	Transcript show: o; cr.
-	Transcript show: d; cr.
-	Transcript show: ScratchOrigin.! !
+	circle fillOval: (Rectangle origin: o corner: (o + d)) color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
+	self changed.! !
 
 !ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/10/2011 14:20'!
 drawPenTrailFor: aMorph from: oldPoint to: newPoint
@@ -1826,21 +1823,18 @@ deleteTerminatedClones
 		isRunning ifFalse: [clone delete]].
 ! !
 
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/14/2011 12:16'!
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/15/2011 15:44'!
 drawCircleFor: aSprite radius: aNumber
 
 	| o d circle |
 
 	self createOrResizeTrailsForm.
-	o _ 	aSprite referencePosition + ScratchOrigin.
 	d _ aNumber@aNumber * 2.
-
+	o _ (aSprite referencePosition x + 240 - (d x / 2 rounded))@(180 - aSprite referencePosition y - (d y / 2 rounded)).
+	
 	circle _ FormCanvas on: penTrailsForm.
-	circle fillOval: (Rectangle origin: o corner: d) color: Color red borderWidth: 2 borderColor: Color black.
-
-	Transcript show: o; cr.
-	Transcript show: d; cr.
-	Transcript show: ScratchOrigin.! !
+	circle fillOval: (Rectangle origin: o corner: (o + d)) color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
+	self changed.! !
 
 !ScratchStageMorph methodsFor: 'drawing' stamp: 'JM 11/8/2011 16:41'!
 drawOn: aCanvas

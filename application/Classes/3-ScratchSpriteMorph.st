@@ -1,5 +1,5 @@
 ScriptableScratchMorph subclass: #ScratchSpriteMorph
-	instanceVariableNames: 'scalePoint rotationDegrees rotationStyle rotatedForm offsetWhenRotated draggable penDown penSize penColor penHue penShade penGhosting subsprites ownerSprite offset virtualScale rotateWithOwner refPos prototype '
+	instanceVariableNames: 'scalePoint rotationDegrees rotationStyle rotatedForm offsetWhenRotated draggable penDown penSize penColor penHue penShade penGhosting fillColor fillHue fillShade fillGhosting subsprites ownerSprite offset virtualScale rotateWithOwner refPos prototype '
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Scratch-Objects'!
@@ -19,7 +19,7 @@ The leftRight style is useful for side-views of things such as cars, horses, etc
 !
 
 
-!ScratchSpriteMorph methodsFor: 'initialization' stamp: 'JM 11/9/2011 16:03'!
+!ScratchSpriteMorph methodsFor: 'initialization' stamp: 'JM 11/15/2011 14:16'!
 initialize
 
 	super initialize.
@@ -35,7 +35,13 @@ initialize
 	penHue _ 133.3.
 	penShade _ 50.
 	penGhosting _ 0.
+	fillHue _ 133.3.
+	fillShade _ 50.
+	fillGhosting _ 0.
+
 	self penColor: Color blue.
+	self fillColor: Color red.
+		
 	self extent: rotatedForm extent.
 ! !
 
@@ -300,10 +306,30 @@ ypos: aNumber
 	self passiveYpos: aNumber! !
 
 
-!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/9/2011 16:08'!
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 13:46'!
+changeFillGhostingBy: aNumber
+
+	self setFillGhostingTo: fillGhosting + aNumber! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 13:47'!
+changeFillHueBy: aNumber
+	"Change the fill hue by given number."
+
+	self setFillHueTo: fillHue + aNumber.
+
+! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 13:48'!
+changeFillShadeBy: aNumber
+	"Change the fill shade (lightness) by given number"
+
+	self setFillShadeTo: fillShade + aNumber.
+! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 13:45'!
 changePenGhostingBy: aNumber
 
-	penGhosting _ (0 max: penGhosting + aNumber) min: 100.! !
+	self setPenGhostingTo: penGhosting + aNumber! !
 
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'jm 4/1/2005 13:31'!
 changePenHueBy: aNumber
@@ -344,6 +370,30 @@ drawCircle: aRadius
 	(stage _	self ownerThatIsA: ScratchStageMorph) ifNil: [ ^ self ].
 	^ stage drawCircleFor: self radius: aRadius! !
 
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 14:05'!
+fillColor
+
+	^ fillColor! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 13:14'!
+fillColor: aColor
+
+	"Set my fill color."
+
+	self undeleteAttribute: #fillColor.
+	self passiveFillColor: aColor! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 14:03'!
+fillGhosting
+
+	| att |
+	att _ #fillGhosting.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
+
+	^ fillGhosting! !
+
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'jens 2/10/2011 00:22'!
 penColor
 
@@ -375,8 +425,14 @@ penDown: aBoolean
 	self undeleteAttribute: #penDown.
 	self passivePenDown: aBoolean! !
 
-!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/9/2011 16:06'!
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 14:04'!
 penGhosting
+
+	| att |
+	att _ #penGhosting.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
 
 	^ penGhosting! !
 
@@ -419,6 +475,27 @@ putPenUp
 	self penDown: false.
 ! !
 
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 13:46'!
+setFillGhostingTo: aNumber
+
+	self undeleteAttribute: #fillGhosting.
+	self passiveFillGhosting: aNumber! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 13:47'!
+setFillHueTo: aNumber
+	"Set the fill hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
+
+	self undeleteAttribute: #fillColor.
+	self passiveSetFillHueTo: aNumber! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 13:48'!
+setFillShadeTo: aNumber
+	"Set the fill shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
+	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
+
+	self undeleteAttribute: #fillShade.
+	self passiveSetFillShadeTo: aNumber! !
+
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'jm 2/10/2008 22:20'!
 setPenColorFromCostumedNamed: costumeNameOrIndex x: x y: y
 	"Set my pen color from my costume of the given name at the given point. If the point is off the edge, set my color to black."
@@ -443,10 +520,11 @@ setPenColorFromCostumedNamed: costumeNameOrIndex x: x y: y
 		ifFalse: [self penColor: (Color colorFromPixelValue: pixel depth: 24)].
 ! !
 
-!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/9/2011 16:09'!
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 13:43'!
 setPenGhostingTo: aNumber
 
-	penGhosting _ (0 max: aNumber) min: 100.! !
+	self undeleteAttribute: #penGhosting.
+	self passivePenGhosting: aNumber! !
 
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'jens 2/9/2011 01:10'!
 setPenHueTo: aNumber
@@ -1968,6 +2046,35 @@ getRotationStyle
 parts
 	^ ScratchListMorph on: self subsprites! !
 
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 11/15/2011 14:10'!
+passiveFillColor: aColor
+	"Set my fill color."
+
+	| b |
+	fillColor _ aColor.
+	fillHue _ (fillColor hue * 200.0) / 360.0.
+	b _ fillColor brightness.
+	b = 1.0
+		ifTrue: [fillShade _ 50.0 + (50.0 * (1.0 - fillColor saturation))]
+		ifFalse: [fillShade _ 50.0 * b].
+
+	fillGhosting > 0 
+		ifTrue: [fillColor _ fillColor alpha: 1 - (fillGhosting / 100)].
+
+	self propagate: #fillColor
+! !
+
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 11/15/2011 14:07'!
+passiveFillGhosting: aNumber
+
+	fillGhosting _ (0 max: aNumber) min: 100.
+	fillGhosting > 0 
+		ifTrue: [ fillColor _ fillColor alpha: 1 - (fillGhosting / 100) ]
+		ifFalse: [ fillColor _ fillColor asNontranslucentColor ].
+
+	self propagate: #fillGhosting.
+! !
+
 !ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'jens 2/8/2011 22:42'!
 passiveLookLike: costumeName
 
@@ -1978,7 +2085,7 @@ passiveLookLike: costumeName
 
 ! !
 
-!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'jens 2/9/2011 23:22'!
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 11/15/2011 14:11'!
 passivePenColor: aColor
 	"Set my pen color."
 
@@ -1990,10 +2097,13 @@ passivePenColor: aColor
 		ifTrue: [penShade _ 50.0 + (50.0 * (1.0 - penColor saturation))]
 		ifFalse: [penShade _ 50.0 * b].
 
+	penGhosting > 0 
+		ifTrue: [penColor _ penColor alpha: 1 - (penGhosting / 100)].
+
 	self propagate: #penColor
 ! !
 
-!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'jens 2/9/2011 00:50'!
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 11/15/2011 13:19'!
 passivePenDown: aBoolean
 
 	| m |
@@ -2002,6 +2112,7 @@ passivePenDown: aBoolean
 	penDown _ aBoolean.
 	penColor ifNil: [penColor _ Color black].  "initialize if necessary"
 	penSize ifNil: [penSize _ 1].  "initialize if necessary"
+	penGhosting ifNil: [penGhosting _ 0].
 
 	(m _ self ownerThatIsA: ScratchStageMorph)
 		ifNotNil: [m penUpOrDownChangeFor: self].
@@ -2009,11 +2120,21 @@ passivePenDown: aBoolean
 	self propagate: #penDown
 ! !
 
-!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'jens 2/9/2011 00:53'!
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 11/15/2011 14:09'!
+passivePenGhosting: aNumber
+
+	penGhosting _ (0 max: aNumber) min: 100.
+	penGhosting > 0 
+		ifTrue:	[ penColor _ penColor alpha: 1 - (penGhosting / 100) ]
+		ifFalse: [ penColor _ penColor asNontranslucentColor ].
+	self propagate: #penGhosting.
+! !
+
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 11/15/2011 15:42'!
 passivePenSize: aNumber
 	"Set my pen width."
 
-	penSize _ aNumber asNumberNoError rounded min: (ScratchFrameMorph workpaneExtent x * 2) max: 1.
+	penSize _ aNumber asNumberNoError rounded min: (ScratchFrameMorph workpaneExtent x * 2) max: 0.
 
 	self propagate: #penSize
 ! !
@@ -2047,6 +2168,41 @@ passiveSetDraggable: aBoolean
 	se updateLockButton
 ! !
 
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 11/15/2011 13:09'!
+passiveSetFillHueTo: aNumber
+	"Set the fill hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
+
+	fillHue _ aNumber asNumberNoError \\ 200.
+	self setFillShadeTo:  fillShade.  "compute and set fillColor"
+
+	self propagate: #fillColor
+! !
+
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 11/15/2011 14:12'!
+passiveSetFillShadeTo: aNumber
+	"Set the fill shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
+	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
+
+	| normalizeShade scale k |
+	fillShade _ aNumber asNumberNoError asFloat \\ 200.0.
+	fillColor _ Color h: (360.0 * fillHue) / 200.0 s: 1.0 v: 1.0.
+	normalizeShade _ fillShade > 100.0 ifTrue: [200.0 - fillShade] ifFalse: [fillShade].
+
+	normalizeShade = 50.0 ifTrue: [^ self].  "pure color"
+
+	scale _ 1.0 / 60.0.
+	k _ 1.0 - (50.0 * scale).
+	normalizeShade < 50.0 ifTrue: [
+		fillColor _ fillColor mixed: (scale * normalizeShade) + k with: Color black].
+	normalizeShade > 50.0 ifTrue: [
+		fillColor _ fillColor mixed: 1.0 - (scale * (normalizeShade - 50.0)) with: Color white].
+
+	fillGhosting > 0 
+		ifTrue: [fillColor _ fillColor alpha: 1 - (fillGhosting / 100)].
+
+	self propagate: #fillShade
+! !
+
 !ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'jens 2/9/2011 00:51'!
 passiveSetPenHueTo: aNumber
 	"Set the pen hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
@@ -2057,7 +2213,7 @@ passiveSetPenHueTo: aNumber
 	self propagate: #penColor
 ! !
 
-!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'jens 2/9/2011 00:52'!
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 11/15/2011 14:12'!
 passiveSetPenShadeTo: aNumber
 	"Set the pen shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
 	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
@@ -2075,6 +2231,9 @@ passiveSetPenShadeTo: aNumber
 		penColor _ penColor mixed: (scale * normalizeShade) + k with: Color black].
 	normalizeShade > 50.0 ifTrue: [
 		penColor _ penColor mixed: 1.0 - (scale * (normalizeShade - 50.0)) with: Color white].
+
+	penGhosting > 0 
+		ifTrue: [penColor _ penColor alpha: 1 - (penGhosting / 100)].
 
 	self propagate: #penShade
 ! !
@@ -2218,6 +2377,28 @@ spawn
 	^ child	! !
 
 
+!ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 11/15/2011 13:11'!
+fillHue
+
+	| att |
+	att _ #fillColor.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
+
+	^ fillHue! !
+
+!ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 11/15/2011 13:12'!
+fillShade
+
+	| att |
+	att _ #fillShade.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
+
+	^ fillShade! !
+
 !ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'jens 2/10/2011 00:03'!
 penHue
 
@@ -2245,7 +2426,7 @@ penShade
 ScratchSpriteMorph class
 	instanceVariableNames: ''!
 
-!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/14/2011 11:19'!
+!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/15/2011 11:42'!
 blockSpecs
 
 	| blocks |
@@ -2298,6 +2479,9 @@ blockSpecs
 			-
 			('change fill color by: %n'		-	changeFillHueBy:)
 			('set fill color to %c'				-	fillColor:)
+			-
+			('change fill shade by %n'		-	changeFillShadeBy:)
+			('set fill shade to %n'			-	setFillShadeTo:)
 			-
 			('change fill ghosting by: %n'	-	changeFillGhostingBy:)
 			('set fill ghosting to: %n'		-	setFillGhostingTo:)
