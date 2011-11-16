@@ -370,6 +370,21 @@ drawCircle: aRadius
 	(stage _	self ownerThatIsA: ScratchStageMorph) ifNil: [ ^ self ].
 	^ stage drawCircleFor: self radius: aRadius! !
 
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/16/2011 10:21'!
+drawRectangle: aWidth by: aHeight
+
+	| stage |
+	(stage _ self ownerThatIsA: ScratchStageMorph) ifNil: [ ^ self ].
+	stage drawRectangleFor: self width: aWidth height: aHeight.! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/16/2011 13:31'!
+drawTriangle: s1 by: s2 by: s3
+
+	| stage |
+
+	(stage _	self ownerThatIsA: ScratchStageMorph) ifNil: [ ^ self ].
+	^ stage drawPolygonFor: self! !
+
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 14:05'!
 fillColor
 

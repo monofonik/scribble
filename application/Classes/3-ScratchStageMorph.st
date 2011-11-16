@@ -1134,6 +1134,40 @@ drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	self invalidRect: r.
 ! !
 
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 14:00'!
+drawPolygonFor: aSprite
+
+	| canvas verts poly |
+
+	verts _ {0@0 . 0@100 . 100@100}.
+	poly _ PolygonMorph vertices: verts color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
+		
+	self createOrResizeTrailsForm.
+	canvas _ FormCanvas on: penTrailsForm. 
+	poly drawOn: canvas.
+
+	self changed.! !
+
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 14:30'!
+drawRectangleFor: aSprite width: aWidth height: aHeight
+
+	| o canvas rect rPoints poly |
+
+	self createOrResizeTrailsForm.
+
+	o _ (aSprite referencePosition x + 240 )@(180 - aSprite referencePosition y).
+	canvas _ FormCanvas on: penTrailsForm.
+	rect _ Rectangle origin: o extent: (aWidth@aHeight).
+	rPoints _ rect corners.
+	Transcript show: rPoints; cr; cr.
+	rPoints _ rPoints collect: [ :p | p _ (p rotateBy: (90 - aSprite heading) degreesToRadians about: rect center) rounded ].
+	Transcript show: rPoints; cr; cr.
+	poly _ PolygonMorph vertices: rPoints color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
+	poly drawOn: canvas.
+	self changed.
+	
+	! !
+
 !ScratchStageMorph methodsFor: 'pen support' stamp: 'jm 6/2/2009 18:50'!
 penTrailsForm
 
@@ -1880,6 +1914,20 @@ drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	self invalidRect: r.
 ! !
 
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 14:00'!
+drawPolygonFor: aSprite
+
+	| canvas verts poly |
+
+	verts _ {0@0 . 0@100 . 100@100}.
+	poly _ PolygonMorph vertices: verts color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
+		
+	self createOrResizeTrailsForm.
+	canvas _ FormCanvas on: penTrailsForm. 
+	poly drawOn: canvas.
+
+	self changed.! !
+
 !ScratchStageMorph methodsFor: 'drawing' stamp: 'jm 1/23/2009 11:14'!
 drawQuarterSizeOn: aCanvas
 	"Draw myself and my submorphs to an offscreen canvas, then scale down to quarter size and draw that on the given canvas."
@@ -1915,6 +1963,26 @@ xxx"
 	"the following scales down entire stage:"
 "	LowResPlugin scale: cachedForm into: aCanvas form at: aCanvas origin + self position."
 ! !
+
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 14:30'!
+drawRectangleFor: aSprite width: aWidth height: aHeight
+
+	| o canvas rect rPoints poly |
+
+	self createOrResizeTrailsForm.
+
+	o _ (aSprite referencePosition x + 240 )@(180 - aSprite referencePosition y).
+	canvas _ FormCanvas on: penTrailsForm.
+	rect _ Rectangle origin: o extent: (aWidth@aHeight).
+	rPoints _ rect corners.
+	Transcript show: rPoints; cr; cr.
+	rPoints _ rPoints collect: [ :p | p _ (p rotateBy: (90 - aSprite heading) degreesToRadians about: rect center) rounded ].
+	Transcript show: rPoints; cr; cr.
+	poly _ PolygonMorph vertices: rPoints color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
+	poly drawOn: canvas.
+	self changed.
+	
+	! !
 
 !ScratchStageMorph methodsFor: 'drawing' stamp: 'jm 11/30/2007 23:41'!
 drawSubmorphsOn: aCanvas
