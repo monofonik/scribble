@@ -1148,7 +1148,23 @@ drawPolygonFor: aSprite
 
 	self changed.! !
 
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 14:30'!
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 16:00'!
+drawPolygonFor: aSprite points: aCollection
+
+	| canvas poly verts |
+
+	self createOrResizeTrailsForm.
+	canvas _ FormCanvas on: penTrailsForm. 
+
+	"translate the vertices to this co-ordinate system"
+	verts _ aCollection collect: [ :v | v _ (v scaleBy: 1@-1) translateBy: 240@180 ].
+
+	"create the poly and draw it"
+	poly _ PolygonMorph vertices: verts color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
+	poly drawOn: canvas.
+	self changed.! !
+
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 14:32'!
 drawRectangleFor: aSprite width: aWidth height: aHeight
 
 	| o canvas rect rPoints poly |
@@ -1158,15 +1174,38 @@ drawRectangleFor: aSprite width: aWidth height: aHeight
 	o _ (aSprite referencePosition x + 240 )@(180 - aSprite referencePosition y).
 	canvas _ FormCanvas on: penTrailsForm.
 	rect _ Rectangle origin: o extent: (aWidth@aHeight).
+
+	"get the transformed vertices"
 	rPoints _ rect corners.
-	Transcript show: rPoints; cr; cr.
 	rPoints _ rPoints collect: [ :p | p _ (p rotateBy: (90 - aSprite heading) degreesToRadians about: rect center) rounded ].
-	Transcript show: rPoints; cr; cr.
+
+	"create the rectangle polygon"
 	poly _ PolygonMorph vertices: rPoints color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
 	poly drawOn: canvas.
 	self changed.
 	
 	! !
+
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 15:29'!
+drawTriangleFor: aSprite lengths: anArray
+
+	"delete me"
+	| sorted canvas verts poly |
+
+	"first verify that a triangle can be formed"
+	anArray size ~= 3 ifTrue: [ self error: 'Expected 3 side lengths' ].
+	sorted _ anArray asSortedCollection.
+	(sorted at: 1 > (sorted at: 2) + (sorted at: 3))
+		ifTrue: [ self error: 'Supplied lengths cannot form a triangle'].
+	
+	verts _ {0@0 . 0@100 . 100@100}.
+	poly _ PolygonMorph vertices: verts color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
+		
+	
+	canvas _ FormCanvas on: penTrailsForm. 
+	poly drawOn: canvas.
+
+	self changed.! !
 
 !ScratchStageMorph methodsFor: 'pen support' stamp: 'jm 6/2/2009 18:50'!
 penTrailsForm
@@ -1928,6 +1967,22 @@ drawPolygonFor: aSprite
 
 	self changed.! !
 
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 16:00'!
+drawPolygonFor: aSprite points: aCollection
+
+	| canvas poly verts |
+
+	self createOrResizeTrailsForm.
+	canvas _ FormCanvas on: penTrailsForm. 
+
+	"translate the vertices to this co-ordinate system"
+	verts _ aCollection collect: [ :v | v _ (v scaleBy: 1@-1) translateBy: 240@180 ].
+
+	"create the poly and draw it"
+	poly _ PolygonMorph vertices: verts color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
+	poly drawOn: canvas.
+	self changed.! !
+
 !ScratchStageMorph methodsFor: 'drawing' stamp: 'jm 1/23/2009 11:14'!
 drawQuarterSizeOn: aCanvas
 	"Draw myself and my submorphs to an offscreen canvas, then scale down to quarter size and draw that on the given canvas."
@@ -1964,7 +2019,7 @@ xxx"
 "	LowResPlugin scale: cachedForm into: aCanvas form at: aCanvas origin + self position."
 ! !
 
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 14:30'!
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 14:32'!
 drawRectangleFor: aSprite width: aWidth height: aHeight
 
 	| o canvas rect rPoints poly |
@@ -1974,10 +2029,12 @@ drawRectangleFor: aSprite width: aWidth height: aHeight
 	o _ (aSprite referencePosition x + 240 )@(180 - aSprite referencePosition y).
 	canvas _ FormCanvas on: penTrailsForm.
 	rect _ Rectangle origin: o extent: (aWidth@aHeight).
+
+	"get the transformed vertices"
 	rPoints _ rect corners.
-	Transcript show: rPoints; cr; cr.
 	rPoints _ rPoints collect: [ :p | p _ (p rotateBy: (90 - aSprite heading) degreesToRadians about: rect center) rounded ].
-	Transcript show: rPoints; cr; cr.
+
+	"create the rectangle polygon"
 	poly _ PolygonMorph vertices: rPoints color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
 	poly drawOn: canvas.
 	self changed.
@@ -2002,6 +2059,27 @@ drawSubmorphsOn: aCanvas
 			m drawTalkBubbleOn: clipCanvas]].
 
 ! !
+
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 15:29'!
+drawTriangleFor: aSprite lengths: anArray
+
+	"delete me"
+	| sorted canvas verts poly |
+
+	"first verify that a triangle can be formed"
+	anArray size ~= 3 ifTrue: [ self error: 'Expected 3 side lengths' ].
+	sorted _ anArray asSortedCollection.
+	(sorted at: 1 > (sorted at: 2) + (sorted at: 3))
+		ifTrue: [ self error: 'Supplied lengths cannot form a triangle'].
+	
+	verts _ {0@0 . 0@100 . 100@100}.
+	poly _ PolygonMorph vertices: verts color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
+		
+	
+	canvas _ FormCanvas on: penTrailsForm. 
+	poly drawOn: canvas.
+
+	self changed.! !
 
 !ScratchStageMorph methodsFor: 'drawing' stamp: 'jm 12/16/2006 12:21'!
 exportFileName: fileName

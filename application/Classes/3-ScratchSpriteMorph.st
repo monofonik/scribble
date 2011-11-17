@@ -1,5 +1,5 @@
 ScriptableScratchMorph subclass: #ScratchSpriteMorph
-	instanceVariableNames: 'scalePoint rotationDegrees rotationStyle rotatedForm offsetWhenRotated draggable penDown penSize penColor penHue penShade penGhosting fillColor fillHue fillShade fillGhosting subsprites ownerSprite offset virtualScale rotateWithOwner refPos prototype '
+	instanceVariableNames: 'scalePoint rotationDegrees rotationStyle rotatedForm offsetWhenRotated draggable penDown penSize penColor penHue penShade penGhosting fillColor fillHue fillShade fillGhosting subsprites ownerSprite offset virtualScale rotateWithOwner refPos prototype pointsList moving '
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Scratch-Objects'!
@@ -19,7 +19,7 @@ The leftRight style is useful for side-views of things such as cars, horses, etc
 !
 
 
-!ScratchSpriteMorph methodsFor: 'initialization' stamp: 'JM 11/15/2011 14:16'!
+!ScratchSpriteMorph methodsFor: 'initialization' stamp: 'JM 11/17/2011 10:20'!
 initialize
 
 	super initialize.
@@ -41,8 +41,11 @@ initialize
 
 	self penColor: Color blue.
 	self fillColor: Color red.
-		
+
+	pointsList _ nil.		
 	self extent: rotatedForm extent.
+
+	moving _ false.
 ! !
 
 
@@ -140,7 +143,7 @@ referencePosition
 	^ p x @ p y negated
 ! !
 
-!ScratchSpriteMorph methodsFor: 'accessing' stamp: 'jm 9/25/2007 13:12'!
+!ScratchSpriteMorph methodsFor: 'accessing' stamp: 'JM 11/17/2011 10:19'!
 referencePosition: aPoint
 	"Set my reference position. Avoid infinite or NaN coordinates. Keep on screen."
 
@@ -155,7 +158,8 @@ referencePosition: aPoint
 	p _ newX @ newY negated.
 	self position: ScratchOrigin + (p - offsetWhenRotated).
 	self keepOnScreen.
-! !
+
+	moving ifFalse: [ self updatePointsList ].! !
 
 !ScratchSpriteMorph methodsFor: 'accessing' stamp: 'jm 6/2/2004 19:17'!
 rotatedForm
@@ -377,14 +381,6 @@ drawRectangle: aWidth by: aHeight
 	(stage _ self ownerThatIsA: ScratchStageMorph) ifNil: [ ^ self ].
 	stage drawRectangleFor: self width: aWidth height: aHeight.! !
 
-!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/16/2011 13:31'!
-drawTriangle: s1 by: s2 by: s3
-
-	| stage |
-
-	(stage _	self ownerThatIsA: ScratchStageMorph) ifNil: [ ^ self ].
-	^ stage drawPolygonFor: self! !
-
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 14:05'!
 fillColor
 
@@ -556,6 +552,24 @@ setPenShadeTo: aNumber
 	self undeleteAttribute: #penShade.
 	self passiveSetPenShadeTo: aNumber! !
 
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/16/2011 16:54'!
+shapeEnd
+
+	"stop remembering the points visited and draw the polygon"
+	| stage |
+
+	Transcript show: pointsList; cr.
+	pointsList ifNil: [ ^ self ].
+	stage _ (self ownerThatIsA: ScratchStageMorph) ifNil: [ ^ self ].
+	stage drawPolygonFor: self points: pointsList.
+	pointsList _ nil.! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/16/2011 15:49'!
+shapeStart
+
+	"begin creating a list of points to construct a polygon"
+	pointsList _ OrderedCollection with: self referencePosition.! !
+
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'jm 8/2/2005 18:52'!
 stampCostume
 	"Stamp a copy of my current costume on the pen trails layer."
@@ -565,6 +579,13 @@ stampCostume
 	(m _ self ownerThatIsA: ScratchStageMorph)
 		ifNotNil: [m stampCostume: self].
 ! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/16/2011 15:39'!
+updatePointsList
+
+	"add the current location to the points list if necessary"
+	pointsList ifNotNil: [ pointsList add: self referencePosition ].
+	! !
 
 
 !ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'jens 2/8/2011 22:16'!
@@ -593,22 +614,21 @@ bounceOffEdge
 	self ypos: self ypos 
 ! !
 
-!ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'jens 2/8/2011 21:51'!
+!ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'JM 11/17/2011 10:15'!
 changeXposBy: aNumber
 	"Move right by the given amount."
 
-	self xpos: self xpos + aNumber
-
+	self xpos: self xpos + aNumber.
 "
 	self referencePosition: self referencePosition + (aNumber@0).
 	self spread
 "! !
 
-!ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'jens 2/8/2011 21:49'!
+!ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'JM 11/17/2011 10:15'!
 changeYposBy: aNumber
 	"Move up by the given amount."
 
-	self ypos: self ypos + aNumber
+	self ypos: self ypos + aNumber.
 
 "
 	self referencePosition: self referencePosition + (0@aNumber).
@@ -684,7 +704,7 @@ distanceTo: anObject
 	^ (aSpriteOrSymbol referencePosition - self referencePosition) r
 ! !
 
-!ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'jens 2/8/2011 22:17'!
+!ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'JM 11/17/2011 10:15'!
 forward: distance
 	"Move the object forward (i.e., the direction of its heading) by the given distance.
 	Avoid infinite or NaN coordinates"
@@ -704,8 +724,12 @@ forward: distance
 	self releaseSubsprites.
 	self keepOnScreen.
 
+	moving _ true.
 	self xpos: self xpos.
-	self ypos: self ypos 
+	self ypos: self ypos.
+	moving _ false.
+
+	self updatePointsList.
 ! !
 
 !ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'jens 2/8/2011 22:05'!
@@ -767,11 +791,13 @@ gotoSpriteOrMouse: anObject
 
 ! !
 
-!ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'jens 2/8/2011 21:53'!
+!ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'JM 11/17/2011 10:22'!
 gotoX: x y: y
 
-	self xpos: x; ypos: y
-
+	moving _ true.
+	self xpos: x; ypos: y.
+	moving _ false.
+	self updatePointsList.
 
 "
 	self holdSubsprites.
@@ -1345,13 +1371,13 @@ rightButtonMenu
 ! !
 
 
-!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 11/9/2011 16:02'!
+!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 11/16/2011 15:34'!
 fieldsVersion
 
-	^ 6
+	^ 7
 ! !
 
-!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 11/9/2011 16:03'!
+!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 11/16/2011 15:35'!
 initFieldsFrom: anObjStream version: classVersion
 
 	super initFieldsFrom: anObjStream version: classVersion.
@@ -1409,9 +1435,16 @@ initFieldsFrom: anObjStream version: classVersion
 	self initFieldsNamed: #(
 		penGhosting
 	) from: anObjStream.
+
+	classVersion = 6 ifTrue: [ ^ self ].
+	"fields added in version 7"
+	self initFieldsNamed: #(
+		fillGhosting
+		pointsList
+	) from: anObjStream
 ! !
 
-!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 11/9/2011 16:03'!
+!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 11/16/2011 15:34'!
 storeFieldsOn: anObjStream
 
 	| oldP |
@@ -1440,6 +1473,8 @@ storeFieldsOn: anObjStream
 		prototype
 		deletedAttributes
 		penGhosting
+		fillGhosting
+		pointsList
 	) on: anObjStream.
 
 	self position: oldP.  "restore position"
@@ -2303,7 +2338,7 @@ passiveTurn: degrees
 
 ! !
 
-!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'jens 2/8/2011 21:13'!
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 11/17/2011 10:18'!
 passiveXpos: aNumber 
 
 	| num newX |
@@ -2441,7 +2476,7 @@ penShade
 ScratchSpriteMorph class
 	instanceVariableNames: ''!
 
-!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/15/2011 11:42'!
+!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/16/2011 15:46'!
 blockSpecs
 
 	| blocks |
@@ -2490,7 +2525,9 @@ blockSpecs
 			-
 			('circle radius %n'				-	drawCircle:)
 			('rectangle %n by %n'			-	drawRectangle:by:)
-			('triangle %n by %n by %n'		-	drawTriangle:by:by:)
+			-
+			('start shape'					-	shapeStart)
+			('end shape'						- 	shapeEnd)
 			-
 			('change fill color by: %n'		-	changeFillHueBy:)
 			('set fill color to %c'				-	fillColor:)
