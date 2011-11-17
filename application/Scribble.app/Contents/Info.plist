@@ -9,10 +9,26 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>srb</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>ScribbleDoc.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Scribble Document</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>STim</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>image</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>SqueakImage.icns</string>
+			<string>Scribble.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>Squeak Image File</string>
 			<key>CFBundleTypeOSTypes</key>
@@ -350,7 +366,7 @@
 	<key>CFBundleGetInfoString</key>
 	<string>Scribble - Copyright 2011 Monash University FIT</string>
 	<key>CFBundleIconFile</key>
-	<string>scribble.icns</string>
+	<string>Scribble.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>au.edu.monash.infotech.scribble</string>
 	<key>CFBundleInfoDictionaryVersion</key>

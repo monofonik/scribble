@@ -552,13 +552,12 @@ setPenShadeTo: aNumber
 	self undeleteAttribute: #penShade.
 	self passiveSetPenShadeTo: aNumber! !
 
-!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/16/2011 16:54'!
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/17/2011 11:15'!
 shapeEnd
 
 	"stop remembering the points visited and draw the polygon"
 	| stage |
 
-	Transcript show: pointsList; cr.
 	pointsList ifNil: [ ^ self ].
 	stage _ (self ownerThatIsA: ScratchStageMorph) ifNil: [ ^ self ].
 	stage drawPolygonFor: self points: pointsList.
@@ -2476,7 +2475,7 @@ penShade
 ScratchSpriteMorph class
 	instanceVariableNames: ''!
 
-!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/16/2011 15:46'!
+!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/17/2011 11:13'!
 blockSpecs
 
 	| blocks |

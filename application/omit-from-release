@@ -1,0 +1,10 @@
+.bzr*
+*.~?~
+BaseScribble.*
+Classes
+compile.sh
+copyforrelease.sh
+omit-from-release
+ScratchSkin
+Scribble Development.sh
+

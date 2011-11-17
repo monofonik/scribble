@@ -1566,7 +1566,7 @@ checkForWeDo
 		WeDoPlugin readInputs].
 ! !
 
-!ScratchFrameMorph methodsFor: 'stepping' stamp: 'jens 5/3/2010 22:16'!
+!ScratchFrameMorph methodsFor: 'stepping' stamp: 'JM 11/17/2011 11:54'!
 processDroppedFiles
 	"Process any files that have been dropped onto me."
 
@@ -1579,7 +1579,7 @@ processDroppedFiles
 	(droppedFiles copyFrom: 2 to: droppedFiles size) do: [:file |
 		file close.
 		fName _ file fullName.
-		((fName asLowercase endsWith: '.scratch') | (fName asLowercase endsWith: '.sb') | (fName asLowercase endsWith: '.ypr'))
+		((fName asLowercase endsWith: '.scratch') | (fName asLowercase endsWith: '.sb') | (fName asLowercase endsWith: '.ypr') | (fName asLowercase endsWith: '.srb'))
 			ifTrue: [self openScratchDroppedProjectNamed: fName]
 			ifFalse: [
 				((fName asLowercase endsWith: '.sprite') | (fName asLowercase endsWith: '.ysp'))
@@ -2067,7 +2067,7 @@ readSettingsFile
 	^ dict
 ! !
 
-!ScratchFrameMorph methodsFor: 'startup' stamp: 'jens 8/3/2010 00:16'!
+!ScratchFrameMorph methodsFor: 'startup' stamp: 'JM 11/17/2011 11:59'!
 startup
 
 	| startupFileNames fileName arg presentationMode |
@@ -2122,7 +2122,7 @@ startup
 
 	fileName _ startupFileNames
 		detect: [:fn |
-			(fn asLowercase endsWith: '.sb') or: [(fn asLowercase endsWith: '.scratch') or: [fn asLowercase endsWith: '.ypr']]]
+			(fn asLowercase endsWith: '.sb') or: [(fn asLowercase endsWith: '.scratch') or: [(fn asLowercase endsWith: '.ypr') or: [fn asLowercase endsWith: '.srb']]]]
 		ifNone: [presentationMode ifTrue: [self randomProjectName]]. "this is BYOB's screensaver feature -jens"
 	fileName ifNotNil: [
 		presentationMode ifTrue: [Display fillColor: Color black].
@@ -2290,7 +2290,7 @@ fixByteReversedSounds
 		allSoundBuffers do: [:buf | buf reverseEndiannessStereo: false]].
 ! !
 
-!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'jens 5/10/2010 01:24'!
+!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'JM 11/17/2011 13:18'!
 importScratchProject
 	"Allow the user to select a project to open, then merge that project's sprites with the
 current project."
@@ -2301,7 +2301,7 @@ current project."
 
 	response _ ScratchFileChooserDialog
 		chooseExistingFileType: #project
-		extensions: #(scratch sb ypr)
+		extensions: #(scratch sb ypr srb)
 		title: 'Import Project'.
 	response ifNil: [^ self].
 
@@ -2392,7 +2392,7 @@ installNewProject: newWorkpane
 	justSaved _ true.
 ! !
 
-!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'jens 5/3/2010 22:01'!
+!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'JM 11/17/2011 11:54'!
 nameFromFileName: fileName
 	"Return the given Scratch file name without the trailing .sb or .scratch or .ypr extension, if it has one. Ensure the the result is UTF8."
 
@@ -2401,6 +2401,7 @@ nameFromFileName: fileName
 	(s asLowercase endsWith: '.scratch') ifTrue: [s _ s copyFrom: 1 to: s size - 8].
 	(s asLowercase endsWith: '.sb') ifTrue: [s _ s copyFrom: 1 to: s size - 3].
 	(s asLowercase endsWith: '.ypr') ifTrue: [s _ s copyFrom: 1 to: s size - 4].
+	(s asLowercase endsWith: '.srb') ifTrue: [s _ s copyFrom: 1 to: s size - 4].
 	s isUnicode ifFalse: [s _ UTF8 withAll: s].
 
 	^ s
@@ -2481,7 +2482,7 @@ openScratchProjectNamed: fName
 	viewerPane updateContents.
 ! !
 
-!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'jens 6/29/2010 12:57'!
+!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'JM 11/17/2011 11:57'!
 saveScratchProject
 
 	| fName result |
@@ -2499,7 +2500,7 @@ saveScratchProject
 "
 	(ScriptableScratchMorph currentEncoding = #scratch) ifTrue: [
 		(DialogBoxMorph new 
-			title: 'Caution!! Converting Scratch to BYOB'; 
+			title: 'Caution!! Converting Scratch to Scribble'; 
 			withButtonsForYes: true no: true okay: false cancel: false;
 			message: 'You will not be able to open this file in Scratch. Proceed anyway?';
 			getUserResponse) ifFalse: [^self ]].
@@ -2508,7 +2509,9 @@ saveScratchProject
 
 "	fName _ (self nameFromFileName: fName), '.sb'."
 
-	fName _ (self nameFromFileName: fName), '.ypr'.
+"	fName _ (self nameFromFileName: fName), '.ypr'."
+	fName _ (self nameFromFileName: fName), '.srb'.
+
 	projectDirectory _ FileDirectory on: (FileDirectory dirPathFor: fName).
 	projectName _ FileDirectory localNameFor: fName.
 
@@ -2517,7 +2520,7 @@ saveScratchProject
 	self writeScratchProject.
 ! !
 
-!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'jens 5/3/2010 22:20'!
+!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'JM 11/17/2011 11:59'!
 saveScratchProjectNoDialog
 
 	| fName dir |
@@ -2528,7 +2531,8 @@ saveScratchProjectNoDialog
 
 	dir _ ScratchFileChooserDialog getLastFolderForType: #project.
 "	(fName size = 0 | (dir fileExists: fName , '.sb') not) ifTrue: [^ self saveScratchProject]."
-	(fName size = 0 | (dir fileExists: fName , '.ypr') not) ifTrue: [^ self saveScratchProject].
+"	(fName size = 0 | (dir fileExists: fName , '.ypr') not) ifTrue: [^ self saveScratchProject]."
+	(fName size = 0 | (dir fileExists: fName , '.srb') not) ifTrue: [^ self saveScratchProject].
 	ScratchFileChooserDialog lastFolderIsSampleProjectsFolder ifTrue:  [^ self saveScratchProject].
 
 "
@@ -2542,7 +2546,8 @@ saveScratchProjectNoDialog
 	self updateLastHistoryEntryIfNeeded.
 
 "	projectName _ FileDirectory localNameFor: (fName, '.sb'). " "ignore path, if any; save in the original project directory"
-	projectName _ FileDirectory localNameFor: (fName, '.ypr').  "ignore path, if any; save in the original project directory"
+"	projectName _ FileDirectory localNameFor: (fName, '.ypr')."  "ignore path, if any; save in the original project directory"
+	projectName _ FileDirectory localNameFor: (fName, '.srb').  "ignore path, if any; save in the original project directory"
 	projectDirectory _ dir.
 
 	self updateHistoryProjectName: projectName op: 'save'.
@@ -3314,7 +3319,7 @@ updatePanes
 	self updateViewModeButtons.
 ! !
 
-!ScratchFrameMorph methodsFor: 'private' stamp: 'jens 8/14/2009 02:10'!
+!ScratchFrameMorph methodsFor: 'private' stamp: 'JM 11/17/2011 13:11'!
 updateProjectName
 	"Update the project name display in the Scratch title bar."
 
@@ -3323,7 +3328,7 @@ updateProjectName
 	projectTitleMorph contents: (self nameFromFileName: projectName).
 
 	projectTitleMorph contents size > 0
-		ifTrue: [s _ projectTitleMorph contents, '- BYOB']
+		ifTrue: [s _ projectTitleMorph contents, ' - Scribble']
 		ifFalse: [s _ 'BYOB ', Version].
 	ScratchPlugin primSetWindowTitle: s.
 
@@ -3544,7 +3549,7 @@ purgeBlockEditors
 	blockEditors _ blockEditors reject: [:each | 
 		each isInWorld not]! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 8/3/2010 00:30'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 11/17/2011 11:56'!
 randomProjectName
 	| dir projects |
 "	dir _ ScratchFileChooserDialog getDefaultFolderForType: #project."
@@ -3556,7 +3561,8 @@ randomProjectName
 	projects _ dir fileNames
 				select: [:fn | (fn asLowercase endsWith: '.sb')
 						or: [(fn asLowercase endsWith: '.scratch')
-						or: [fn asLowercase endsWith: '.ypr']]].
+						or: [(fn asLowercase endsWith: '.ypr')
+						or: [fn asLowercase endsWith: '.srb']]]].
 	projects size > 0 ifTrue: [^ dir fullNameFor: (projects asArray at: Random new next * projects size + 1)].
 	^ nil! !
 
@@ -5254,7 +5260,7 @@ hidePalette: hidePalette
 	scriptsPane color: (Color r: 149/255 g: 154/255 b: 159/255).
 ! !
 
-!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'jens 5/10/2010 01:24'!
+!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'JM 11/17/2011 13:18'!
 importScratchProject
 	"Allow the user to select a project to open, then merge that project's sprites with the
 current project."
@@ -5265,7 +5271,7 @@ current project."
 
 	response _ ScratchFileChooserDialog
 		chooseExistingFileType: #project
-		extensions: #(scratch sb ypr)
+		extensions: #(scratch sb ypr srb)
 		title: 'Import Project'.
 	response ifNil: [^ self].
 
@@ -5726,7 +5732,7 @@ mouseY
 	^ workPane mouseY
 ! !
 
-!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'jens 5/3/2010 22:01'!
+!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'JM 11/17/2011 11:54'!
 nameFromFileName: fileName
 	"Return the given Scratch file name without the trailing .sb or .scratch or .ypr extension, if it has one. Ensure the the result is UTF8."
 
@@ -5735,6 +5741,7 @@ nameFromFileName: fileName
 	(s asLowercase endsWith: '.scratch') ifTrue: [s _ s copyFrom: 1 to: s size - 8].
 	(s asLowercase endsWith: '.sb') ifTrue: [s _ s copyFrom: 1 to: s size - 3].
 	(s asLowercase endsWith: '.ypr') ifTrue: [s _ s copyFrom: 1 to: s size - 4].
+	(s asLowercase endsWith: '.srb') ifTrue: [s _ s copyFrom: 1 to: s size - 4].
 	s isUnicode ifFalse: [s _ UTF8 withAll: s].
 
 	^ s
@@ -6012,7 +6019,7 @@ printTupleList: anArray on: s
 	s nextPut: $).
 ! !
 
-!ScratchFrameMorph methodsFor: 'stepping' stamp: 'jens 5/3/2010 22:16'!
+!ScratchFrameMorph methodsFor: 'stepping' stamp: 'JM 11/17/2011 11:54'!
 processDroppedFiles
 	"Process any files that have been dropped onto me."
 
@@ -6025,7 +6032,7 @@ processDroppedFiles
 	(droppedFiles copyFrom: 2 to: droppedFiles size) do: [:file |
 		file close.
 		fName _ file fullName.
-		((fName asLowercase endsWith: '.scratch') | (fName asLowercase endsWith: '.sb') | (fName asLowercase endsWith: '.ypr'))
+		((fName asLowercase endsWith: '.scratch') | (fName asLowercase endsWith: '.sb') | (fName asLowercase endsWith: '.ypr') | (fName asLowercase endsWith: '.srb'))
 			ifTrue: [self openScratchDroppedProjectNamed: fName]
 			ifFalse: [
 				((fName asLowercase endsWith: '.sprite') | (fName asLowercase endsWith: '.ysp'))
@@ -6214,7 +6221,7 @@ quitScratch
 	Smalltalk snapshot: false andQuit: true.
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 8/3/2010 00:30'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 11/17/2011 11:56'!
 randomProjectName
 	| dir projects |
 "	dir _ ScratchFileChooserDialog getDefaultFolderForType: #project."
@@ -6226,7 +6233,8 @@ randomProjectName
 	projects _ dir fileNames
 				select: [:fn | (fn asLowercase endsWith: '.sb')
 						or: [(fn asLowercase endsWith: '.scratch')
-						or: [fn asLowercase endsWith: '.ypr']]].
+						or: [(fn asLowercase endsWith: '.ypr')
+						or: [fn asLowercase endsWith: '.srb']]]].
 	projects size > 0 ifTrue: [^ dir fullNameFor: (projects asArray at: Random new next * projects size + 1)].
 	^ nil! !
 
@@ -6500,7 +6508,7 @@ image in end-user (fillScreen) mode?') ifFalse: [^ self].
 	Sensor useOSEvents: true.
 ! !
 
-!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'jens 6/29/2010 12:57'!
+!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'JM 11/17/2011 11:57'!
 saveScratchProject
 
 	| fName result |
@@ -6518,7 +6526,7 @@ saveScratchProject
 "
 	(ScriptableScratchMorph currentEncoding = #scratch) ifTrue: [
 		(DialogBoxMorph new 
-			title: 'Caution!! Converting Scratch to BYOB'; 
+			title: 'Caution!! Converting Scratch to Scribble'; 
 			withButtonsForYes: true no: true okay: false cancel: false;
 			message: 'You will not be able to open this file in Scratch. Proceed anyway?';
 			getUserResponse) ifFalse: [^self ]].
@@ -6527,7 +6535,9 @@ saveScratchProject
 
 "	fName _ (self nameFromFileName: fName), '.sb'."
 
-	fName _ (self nameFromFileName: fName), '.ypr'.
+"	fName _ (self nameFromFileName: fName), '.ypr'."
+	fName _ (self nameFromFileName: fName), '.srb'.
+
 	projectDirectory _ FileDirectory on: (FileDirectory dirPathFor: fName).
 	projectName _ FileDirectory localNameFor: fName.
 
@@ -6536,7 +6546,7 @@ saveScratchProject
 	self writeScratchProject.
 ! !
 
-!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'jens 5/3/2010 22:20'!
+!ScratchFrameMorph methodsFor: 'file read/write' stamp: 'JM 11/17/2011 11:59'!
 saveScratchProjectNoDialog
 
 	| fName dir |
@@ -6547,7 +6557,8 @@ saveScratchProjectNoDialog
 
 	dir _ ScratchFileChooserDialog getLastFolderForType: #project.
 "	(fName size = 0 | (dir fileExists: fName , '.sb') not) ifTrue: [^ self saveScratchProject]."
-	(fName size = 0 | (dir fileExists: fName , '.ypr') not) ifTrue: [^ self saveScratchProject].
+"	(fName size = 0 | (dir fileExists: fName , '.ypr') not) ifTrue: [^ self saveScratchProject]."
+	(fName size = 0 | (dir fileExists: fName , '.srb') not) ifTrue: [^ self saveScratchProject].
 	ScratchFileChooserDialog lastFolderIsSampleProjectsFolder ifTrue:  [^ self saveScratchProject].
 
 "
@@ -6561,7 +6572,8 @@ saveScratchProjectNoDialog
 	self updateLastHistoryEntryIfNeeded.
 
 "	projectName _ FileDirectory localNameFor: (fName, '.sb'). " "ignore path, if any; save in the original project directory"
-	projectName _ FileDirectory localNameFor: (fName, '.ypr').  "ignore path, if any; save in the original project directory"
+"	projectName _ FileDirectory localNameFor: (fName, '.ypr')."  "ignore path, if any; save in the original project directory"
+	projectName _ FileDirectory localNameFor: (fName, '.srb').  "ignore path, if any; save in the original project directory"
 	projectDirectory _ dir.
 
 	self updateHistoryProjectName: projectName op: 'save'.
@@ -6836,7 +6848,7 @@ startHostingScratchSession
 	self showNetworkAddress.
 ! !
 
-!ScratchFrameMorph methodsFor: 'startup' stamp: 'jens 8/3/2010 00:16'!
+!ScratchFrameMorph methodsFor: 'startup' stamp: 'JM 11/17/2011 11:59'!
 startup
 
 	| startupFileNames fileName arg presentationMode |
@@ -6891,7 +6903,7 @@ startup
 
 	fileName _ startupFileNames
 		detect: [:fn |
-			(fn asLowercase endsWith: '.sb') or: [(fn asLowercase endsWith: '.scratch') or: [fn asLowercase endsWith: '.ypr']]]
+			(fn asLowercase endsWith: '.sb') or: [(fn asLowercase endsWith: '.scratch') or: [(fn asLowercase endsWith: '.ypr') or: [fn asLowercase endsWith: '.srb']]]]
 		ifNone: [presentationMode ifTrue: [self randomProjectName]]. "this is BYOB's screensaver feature -jens"
 	fileName ifNotNil: [
 		presentationMode ifTrue: [Display fillColor: Color black].
@@ -7312,7 +7324,7 @@ updatePenPositions
 	stage submorphsDo: [:m | stage updatePenPositionFor: m].
 ! !
 
-!ScratchFrameMorph methodsFor: 'private' stamp: 'jens 8/14/2009 02:10'!
+!ScratchFrameMorph methodsFor: 'private' stamp: 'JM 11/17/2011 13:11'!
 updateProjectName
 	"Update the project name display in the Scratch title bar."
 
@@ -7321,7 +7333,7 @@ updateProjectName
 	projectTitleMorph contents: (self nameFromFileName: projectName).
 
 	projectTitleMorph contents size > 0
-		ifTrue: [s _ projectTitleMorph contents, '- BYOB']
+		ifTrue: [s _ projectTitleMorph contents, ' - Scribble']
 		ifFalse: [s _ 'BYOB ', Version].
 	ScratchPlugin primSetWindowTitle: s.
 
