@@ -12,5 +12,6 @@ fi
 DIR=$1
 shift
 
-echo rsync -a ./ "$DIR" --exclude-from=.bzrignore --exclude-from=omit-from-release "$@"
-rsync -a ./ "$DIR" --exclude-from=.bzrignore --exclude-from=omit-from-release $@
+echo rsync -a ./ "$DIR" --exclude-from=../.bzrignore --exclude-from=omit-from-release "$@"
+rsync -a ./ "$DIR" --exclude-from=../.bzrignore --exclude-from=omit-from-release $@
+cp ./Scribble.image "$DIR/Scribble.image"

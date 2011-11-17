@@ -25,22 +25,6 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>image</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string>Scribble.icns</string>
-			<key>CFBundleTypeName</key>
-			<string>Squeak Image File</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>STim</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
 				<string>sources</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
