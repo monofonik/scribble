@@ -4,3 +4,4 @@ Scribble.changes
 .DS_Store
 *.dmg
 deployment/mac/Scribble/*
+Icon*

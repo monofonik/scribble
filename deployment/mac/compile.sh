@@ -16,8 +16,7 @@ MOUNTDIR="mount"
 
 bzip2 -dkv $TEMPSRC
 mkdir $MOUNTDIR; hdiutil mount -mountpoint $MOUNTDIR $TEMPIMG
-#echo "rsync --exclude='.DS_Store' $APPSRC $MOUNTDIR/$APPNAME"
-rsync -r --exclude='.DS_Store' $APPSRC $MOUNTDIR/$APPNAME
+rsync -r --delete --exclude='.DS_Store' $APPSRC $MOUNTDIR/$APPNAME
 hdiutil detach $MOUNTDIR
 hdiutil convert $TEMPIMG -format UDBZ -o $APPIMG
 rm $TEMPIMG; rmdir $MOUNTDIR
