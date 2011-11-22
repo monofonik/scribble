@@ -3319,7 +3319,7 @@ updatePanes
 	self updateViewModeButtons.
 ! !
 
-!ScratchFrameMorph methodsFor: 'private' stamp: 'JM 11/17/2011 13:11'!
+!ScratchFrameMorph methodsFor: 'private' stamp: 'JM 11/17/2011 13:35'!
 updateProjectName
 	"Update the project name display in the Scratch title bar."
 
@@ -3329,7 +3329,7 @@ updateProjectName
 
 	projectTitleMorph contents size > 0
 		ifTrue: [s _ projectTitleMorph contents, ' - Scribble']
-		ifFalse: [s _ 'BYOB ', Version].
+		ifFalse: [s _ 'Scribble ', Version].
 	ScratchPlugin primSetWindowTitle: s.
 
 	self fixLayout.
@@ -7324,7 +7324,7 @@ updatePenPositions
 	stage submorphsDo: [:m | stage updatePenPositionFor: m].
 ! !
 
-!ScratchFrameMorph methodsFor: 'private' stamp: 'JM 11/17/2011 13:11'!
+!ScratchFrameMorph methodsFor: 'private' stamp: 'JM 11/17/2011 13:35'!
 updateProjectName
 	"Update the project name display in the Scratch title bar."
 
@@ -7334,7 +7334,7 @@ updateProjectName
 
 	projectTitleMorph contents size > 0
 		ifTrue: [s _ projectTitleMorph contents, ' - Scribble']
-		ifFalse: [s _ 'BYOB ', Version].
+		ifFalse: [s _ 'Scribble ', Version].
 	ScratchPlugin primSetWindowTitle: s.
 
 	self fixLayout.
