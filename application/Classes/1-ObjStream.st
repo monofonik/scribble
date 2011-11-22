@@ -3,7 +3,7 @@ Object subclass: #ObjStream
 	classVariableNames: 'FirstPointerClassID FloatClassID IDToClassEntry NameToClassEntry ObjectReferenceID '
 	poolDictionaries: ''
 	category: 'Scratch-Object IO'!
-!ObjStream commentStamp: 'jm 9/28/2003 15:39' prior: 0!
+!ObjStream commentStamp: '<historical>' prior: 0!
 I can serialize a collection of inter-connected objects onto a binary stream or reconstruct the original object network from its serialized form. This allows object structures to be saved in files, transmitted over a network, etc.
 
 I support user class evolution via class version numbers, making it possible to detect and, if so desired, convert old object formats.

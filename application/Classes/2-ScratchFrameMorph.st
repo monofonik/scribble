@@ -308,14 +308,14 @@ author: aString
 
 ! !
 
-!ScratchFrameMorph methodsFor: 'accessing' stamp: 'jens 2/24/2011 20:13'!
+!ScratchFrameMorph methodsFor: 'accessing' stamp: 'JM 11/22/2011 15:26'!
 editMenu: aMenuTitleMorph
 
 	| menu onstage |
 
 	"first create the widest label"
 	onstage _ self checkBoxLabelled: 
-				'Allow Sprites offstage' "localized asMacRoman"
+				'Allow Sprites off canvas' "localized asMacRoman"
 				marked: ScriptableScratchMorph keepOnStage not
 				width: 0.
 
@@ -4606,14 +4606,14 @@ editBlockDefinition: aCustomBlockDefinition for: aScriptableScratchMorph
 	editor getUserResponse.
 	blockEditors remove: editor ifAbsent: []! !
 
-!ScratchFrameMorph methodsFor: 'accessing' stamp: 'jens 2/24/2011 20:13'!
+!ScratchFrameMorph methodsFor: 'accessing' stamp: 'JM 11/22/2011 15:26'!
 editMenu: aMenuTitleMorph
 
 	| menu onstage |
 
 	"first create the widest label"
 	onstage _ self checkBoxLabelled: 
-				'Allow Sprites offstage' "localized asMacRoman"
+				'Allow Sprites off canvas' "localized asMacRoman"
 				marked: ScriptableScratchMorph keepOnStage not
 				width: 0.
 
