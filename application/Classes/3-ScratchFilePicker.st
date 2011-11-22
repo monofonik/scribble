@@ -3,7 +3,7 @@ ImageFrameMorph subclass: #ScratchFilePicker
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Scratch-UI-Dialogs'!
-!ScratchFilePicker commentStamp: 'jm 3/9/2005 11:40' prior: 0!
+!ScratchFilePicker commentStamp: '<historical>' prior: 0!
 Allows the user to navigate through files and folders to select a file.
 !
 

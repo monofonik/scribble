@@ -8,13 +8,13 @@ I represent the background of the Scratch work pane. Like a sprite, I have a set
 !
 
 
-!ScratchStageMorph methodsFor: 'initialization' stamp: 'jm 6/4/2009 12:03'!
+!ScratchStageMorph methodsFor: 'initialization' stamp: 'JM 11/22/2011 15:23'!
 initialize
 
 	super initialize.
 	color _ Color white.
 	self enableDragNDrop: true.
-	objName _ 'Stage' localized.
+	objName _ 'Canvas' localized.
 	costume _ self defaultImageMedia.
 	media _ OrderedCollection with: costume with: SoundMedia new.
 	zoom _ 1.0.
@@ -67,10 +67,10 @@ isQuarterSize: aBoolean
 	isQuarterSize _ aBoolean.
 ! !
 
-!ScratchStageMorph methodsFor: 'accessing' stamp: 'jm 10/25/2007 19:21'!
+!ScratchStageMorph methodsFor: 'accessing' stamp: 'JM 11/22/2011 15:23'!
 objName
 
-	^ 'Stage' localized
+	^ 'Canvas' localized
 ! !
 
 !ScratchStageMorph methodsFor: 'accessing' stamp: 'jm 3/18/2005 23:41'!
@@ -1355,7 +1355,7 @@ storeFieldsOn: anObjStream
 ! !
 
 
-!ScratchStageMorph methodsFor: 'menus' stamp: 'jm 10/25/2007 19:25'!
+!ScratchStageMorph methodsFor: 'menus' stamp: 'JM 11/22/2011 15:26'!
 rightButtonMenu
 	"Present the right button menu."
 
@@ -1363,7 +1363,7 @@ rightButtonMenu
 	menu _ CustomMenu new.
 	menu add: 'grab screen region for new sprite' action: #grabSpriteFromScreen.
 	menu addLine.
-	menu add: 'save picture of stage...' action: #stageShot.
+	menu add: 'save picture of canvas...' action: #stageShot.
 	menu localize; invokeOn: self.
 ! !
 
@@ -1429,10 +1429,10 @@ isPaused
 
 ! !
 
-!ScratchStageMorph methodsFor: 'byob' stamp: 'jens 11/23/2009 21:28'!
+!ScratchStageMorph methodsFor: 'byob' stamp: 'JM 11/22/2011 15:23'!
 listInVarNamed: varName targetName: targetName
 
-	targetName = 'Stage' ifTrue: [
+	targetName = 'Canvas' ifTrue: [
 		^self getVar: varName].
 
 	sprites do: [:sprite |
@@ -1441,10 +1441,10 @@ listInVarNamed: varName targetName: targetName
 
 	^ nil! !
 
-!ScratchStageMorph methodsFor: 'byob' stamp: 'jens 11/23/2009 21:26'!
+!ScratchStageMorph methodsFor: 'byob' stamp: 'JM 11/22/2011 15:23'!
 listNamed: listName targetName: targetName
 
-	targetName = 'Stage' ifTrue: [
+	targetName = 'Canvas' ifTrue: [
 		^self listNamed: listName ].
 
 	sprites do: [:sprite |
@@ -1475,7 +1475,7 @@ pauseAllProcesses
 		each pauseProcess]
 ! !
 
-!ScratchStageMorph methodsFor: 'byob' stamp: 'jens 11/23/2009 20:33'!
+!ScratchStageMorph methodsFor: 'byob' stamp: 'JM 11/22/2011 15:23'!
 referenceToList: aScratchList
 
 	"answer an Array describing the variable which holds an anonymous list, nil
@@ -1488,7 +1488,7 @@ referenceToList: aScratchList
 
 	self varNames do: [:key |
 		aScratchList == (vars at: key)
-			ifTrue: [^ Array with: 'Stage' with: key ]].
+			ifTrue: [^ Array with: 'Canvas' with: key ]].
 
 	sprites do: [:sprite |
 		sprite varNames do: [:vname |
@@ -2277,13 +2277,13 @@ initFieldsFrom: anObjStream version: classVersion
 	lists ifNil: [lists _ Dictionary new].  "work around"
 ! !
 
-!ScratchStageMorph methodsFor: 'initialization' stamp: 'jm 6/4/2009 12:03'!
+!ScratchStageMorph methodsFor: 'initialization' stamp: 'JM 11/22/2011 15:23'!
 initialize
 
 	super initialize.
 	color _ Color white.
 	self enableDragNDrop: true.
-	objName _ 'Stage' localized.
+	objName _ 'Canvas' localized.
 	costume _ self defaultImageMedia.
 	media _ OrderedCollection with: costume with: SoundMedia new.
 	zoom _ 1.0.
@@ -2344,10 +2344,10 @@ isQuarterSize: aBoolean
 	isQuarterSize _ aBoolean.
 ! !
 
-!ScratchStageMorph methodsFor: 'byob' stamp: 'jens 11/23/2009 21:28'!
+!ScratchStageMorph methodsFor: 'byob' stamp: 'JM 11/22/2011 15:23'!
 listInVarNamed: varName targetName: targetName
 
-	targetName = 'Stage' ifTrue: [
+	targetName = 'Canvas' ifTrue: [
 		^self getVar: varName].
 
 	sprites do: [:sprite |
@@ -2356,10 +2356,10 @@ listInVarNamed: varName targetName: targetName
 
 	^ nil! !
 
-!ScratchStageMorph methodsFor: 'byob' stamp: 'jens 11/23/2009 21:26'!
+!ScratchStageMorph methodsFor: 'byob' stamp: 'JM 11/22/2011 15:23'!
 listNamed: listName targetName: targetName
 
-	targetName = 'Stage' ifTrue: [
+	targetName = 'Canvas' ifTrue: [
 		^self listNamed: listName ].
 
 	sprites do: [:sprite |
@@ -2466,10 +2466,10 @@ notePlayerFor: aScratchObject
 	^ newPlayer
 ! !
 
-!ScratchStageMorph methodsFor: 'accessing' stamp: 'jm 10/25/2007 19:21'!
+!ScratchStageMorph methodsFor: 'accessing' stamp: 'JM 11/22/2011 15:23'!
 objName
 
-	^ 'Stage' localized
+	^ 'Canvas' localized
 ! !
 
 !ScratchStageMorph methodsFor: 'midi' stamp: 'jm 8/2/2005 19:09'!
@@ -2605,7 +2605,7 @@ processesToRun
 	^ result
  ! !
 
-!ScratchStageMorph methodsFor: 'byob' stamp: 'jens 11/23/2009 20:33'!
+!ScratchStageMorph methodsFor: 'byob' stamp: 'JM 11/22/2011 15:23'!
 referenceToList: aScratchList
 
 	"answer an Array describing the variable which holds an anonymous list, nil
@@ -2618,7 +2618,7 @@ referenceToList: aScratchList
 
 	self varNames do: [:key |
 		aScratchList == (vars at: key)
-			ifTrue: [^ Array with: 'Stage' with: key ]].
+			ifTrue: [^ Array with: 'Canvas' with: key ]].
 
 	sprites do: [:sprite |
 		sprite varNames do: [:vname |
@@ -2681,7 +2681,7 @@ resumeAllProcesses
 		each resumeProcess]
 ! !
 
-!ScratchStageMorph methodsFor: 'menus' stamp: 'jm 10/25/2007 19:25'!
+!ScratchStageMorph methodsFor: 'menus' stamp: 'JM 11/22/2011 15:26'!
 rightButtonMenu
 	"Present the right button menu."
 
@@ -2689,7 +2689,7 @@ rightButtonMenu
 	menu _ CustomMenu new.
 	menu add: 'grab screen region for new sprite' action: #grabSpriteFromScreen.
 	menu addLine.
-	menu add: 'save picture of stage...' action: #stageShot.
+	menu add: 'save picture of canvas...' action: #stageShot.
 	menu localize; invokeOn: self.
 ! !
 

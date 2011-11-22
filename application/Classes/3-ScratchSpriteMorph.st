@@ -766,6 +766,11 @@ glideSecs: duration toX: endX y: endY elapsed: elapsed from: startPoint
 
 "! !
 
+!ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'JM 11/22/2011 13:47'!
+gotoRandomLocation
+
+	self gotoX: (self randomFrom: -240 to: 240) y: (self randomFrom: -180 to: 180)! !
+
 !ScratchSpriteMorph methodsFor: 'motion ops' stamp: 'jens 4/28/2010 22:42'!
 gotoSpriteOrMouse: anObject
 	"Go to the given sprite or mouse position."
@@ -2475,7 +2480,7 @@ penShade
 ScratchSpriteMorph class
 	instanceVariableNames: ''!
 
-!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/17/2011 11:13'!
+!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/22/2011 13:47'!
 blockSpecs
 
 	| blocks |
@@ -2490,6 +2495,7 @@ blockSpecs
 			-
 			('go to x:%n y:%n'				-	gotoX:y: 0 0)
 			('go to %m'						-	gotoSpriteOrMouse:)
+			('go to random location'			-	gotoRandomLocation)
 			('glide %n secs to x:%n y:%n'	t	glideSecs:toX:y:elapsed:from: 1 50 50)
 			-
 			('change x by %n'				-	changeXposBy: 10)
@@ -2516,7 +2522,7 @@ blockSpecs
 			('change pen shade by %n'		-	changePenShadeBy:)
 			('set pen shade to %n'			-	setPenShadeTo: 50)
 			-
-			('change pen ghosting to %n'	-	changePenGhostingBy:)
+			('change pen ghosting by %n'	-	changePenGhostingBy:)
 			('set pen ghosting to %n'		-	setPenGhostingTo: 50)
 			-
 			('change pen size by %n'		-	changePenSizeBy: 1)

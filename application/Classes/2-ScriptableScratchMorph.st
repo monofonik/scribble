@@ -2865,7 +2865,7 @@ blockFromOldFormTuple: tuple receiver: scriptOwner
 	^ block
 ! !
 
-!ScriptableScratchMorph methodsFor: 'blocks' stamp: 'jens 7/8/2010 23:24'!
+!ScriptableScratchMorph methodsFor: 'blocks' stamp: 'JM 11/22/2011 15:24'!
 blockFromTuple: tuple receiver: scriptOwner
 	"Answer a new block for the given tuple."
 
@@ -2874,7 +2874,7 @@ blockFromTuple: tuple receiver: scriptOwner
 	#byob = tuple first ifFalse: [
 		^self blockFromOldFormTuple: tuple receiver: scriptOwner ].
 
-	'Stage' = tuple second 
+	'Canvas' = tuple second 
 		ifTrue: [ rcvr _ self ownerThatIsA: ScratchStageMorph ]
 		ifFalse: [(tuple second isKindOf: VariableFrame) 
 			ifFalse: [ rcvr _ self coerceSpriteArg: tuple second ]].
@@ -4956,12 +4956,12 @@ interpretStringAsNumberIfPossible: anObject
 
 ! !
 
-!ScriptableScratchMorph methodsFor: 'private' stamp: 'jm 6/21/2009 11:53'!
+!ScriptableScratchMorph methodsFor: 'private' stamp: 'JM 11/22/2011 15:24'!
 nextInstanceName
 	"Answer a name for a new instance. For sprites, an attempt is made to create a unique name of the form 'spriteN'."
 
 	| stage lastN digits |
-	self = ScratchStageMorph ifTrue: [^ 'Stage' localized].
+	self = ScratchStageMorph ifTrue: [^ 'Canvas' localized].
 
 	(stage _ self ownerThatIsA: ScratchStageMorph) ifNil: [^ 'Sprite' localized asUTF8, 1 printString].
 	lastN _ 0.
@@ -5318,7 +5318,7 @@ closeBlockEditor
 	sf ifNil: [^self].
 	^sf closeBlockEditor! !
 
-!ScriptableScratchMorph methodsFor: 'byob' stamp: 'jens 1/27/2011 01:15'!
+!ScriptableScratchMorph methodsFor: 'byob' stamp: 'JM 11/22/2011 15:24'!
 convertListVarReferencesToTuples
 
 	"format conventions:
@@ -5358,14 +5358,14 @@ convertListVarReferencesToTuples
 		(obj isKindOf: BlockMorph) ifTrue: [
 			(obj receiver isKindOf: ScriptableScratchMorph)
 				ifTrue: [(obj receiver isKindOf: ScratchStageMorph)
-					ifTrue: [rcvr _ 'Stage']
+					ifTrue: [rcvr _ 'Canvas']
 					ifFalse: [rcvr _ obj receiver objName]]
 				ifFalse: [ rcvr _ '' ].
 			vars at: varName put: (Array with: #block with: rcvr with: obj tupleSequence) ].
 
 		(obj isKindOf: ScratchListMorph) ifTrue: [
 			ref _ obj asReferenceTuple. 
-			(ref first = #variableList) & ({objName. 'Stage'} includes: ref second ) & (ref third = varName)
+			(ref first = #variableList) & ({objName. 'Canvas'} includes: ref second ) & (ref third = varName)
 				ifTrue: [obj convertStacksToTuples]
 				ifFalse: [ vars at: varName put: ref]].
 
@@ -5389,7 +5389,7 @@ convertTuplesToDefinitions
 		eachDef migrateBlockVars].
 ! !
 
-!ScriptableScratchMorph methodsFor: 'byob' stamp: 'jens 1/27/2011 01:58'!
+!ScriptableScratchMorph methodsFor: 'byob' stamp: 'JM 11/22/2011 15:24'!
 convertVarTuplesToListReferences
 
 	"format conventions:
@@ -5431,7 +5431,7 @@ convertVarTuplesToListReferences
 
 		(obj isKindOf: Array) ifTrue: [
 			stage _ self ownerThatIsA: ScratchStageMorph.
-			obj second = 'Stage'
+			obj second = 'Canvas'
 				ifTrue: [rcvr _ stage ]
 				ifFalse: [rcvr _ stage coerceSpriteArg: obj second ].
 
