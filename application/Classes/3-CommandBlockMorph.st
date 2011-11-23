@@ -3,7 +3,7 @@ BlockMorph subclass: #CommandBlockMorph
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Scratch-Blocks'!
-!CommandBlockMorph commentStamp: 'jm 5/10/2004 19:25' prior: 0!
+!CommandBlockMorph commentStamp: '<historical>' prior: 0!
 I represent a command or reporter. I have a label and may also have one or more arguments. The label text, number of arguments, and ordering of arguments and keywords are defined by my commandSpec string. This string consists of a sequence of keywords interspersed with argument specifications that indicate where the arguments appear. Here are some possible argument specifications:
 
 	%b	- boolean

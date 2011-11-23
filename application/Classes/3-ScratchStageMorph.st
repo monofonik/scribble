@@ -1112,6 +1112,25 @@ drawCircleFor: aSprite radius: aNumber
 	circle fillOval: (Rectangle origin: o corner: (o + d)) color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
 	self changed.! !
 
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/23/2011 15:12'!
+drawOvalFor: aSprite width: w height: h
+
+	| points rPoints theta |
+
+	points _ OrderedCollection new.
+
+	theta _ 0.
+	60 timesRepeat: [ 
+		points add: (w * (theta degreesToRadians cos)) @ (h * (theta degreesToRadians sin)).
+		theta _ theta + 6. ].
+
+	"get the transformed vertices"
+	rPoints _ points collect: [ :p | 
+		p _ (p rotateBy: (aSprite heading - 90) degreesToRadians about: 0@0) rounded.
+		p _ p translateBy: (aSprite referencePosition x )@(aSprite referencePosition y)].
+
+	self drawPolygonFor: aSprite points: rPoints.! !
+
 !ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/10/2011 14:20'!
 drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	"Draw a pen trail between the given points for the given morph using its pen size and color. The points are in Scratch coordinates (that is, 0@0 is the center of the work pane and y increases toward the top of the screen."
@@ -1133,20 +1152,6 @@ drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	r _ ((p1 rect: p2) expandBy: penSize + 1) translateBy: self topLeft.
 	self invalidRect: r.
 ! !
-
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 14:00'!
-drawPolygonFor: aSprite
-
-	| canvas verts poly |
-
-	verts _ {0@0 . 0@100 . 100@100}.
-	poly _ PolygonMorph vertices: verts color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
-		
-	self createOrResizeTrailsForm.
-	canvas _ FormCanvas on: penTrailsForm. 
-	poly drawOn: canvas.
-
-	self changed.! !
 
 !ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 16:00'!
 drawPolygonFor: aSprite points: aCollection
@@ -1931,6 +1936,25 @@ drawOn: aCanvas
 	penTrailsForm ifNotNil: [clipC translucentImage: penTrailsForm at: self position].
 ! !
 
+!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/23/2011 15:12'!
+drawOvalFor: aSprite width: w height: h
+
+	| points rPoints theta |
+
+	points _ OrderedCollection new.
+
+	theta _ 0.
+	60 timesRepeat: [ 
+		points add: (w * (theta degreesToRadians cos)) @ (h * (theta degreesToRadians sin)).
+		theta _ theta + 6. ].
+
+	"get the transformed vertices"
+	rPoints _ points collect: [ :p | 
+		p _ (p rotateBy: (aSprite heading - 90) degreesToRadians about: 0@0) rounded.
+		p _ p translateBy: (aSprite referencePosition x )@(aSprite referencePosition y)].
+
+	self drawPolygonFor: aSprite points: rPoints.! !
+
 !ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/10/2011 14:20'!
 drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	"Draw a pen trail between the given points for the given morph using its pen size and color. The points are in Scratch coordinates (that is, 0@0 is the center of the work pane and y increases toward the top of the screen."
@@ -1952,20 +1976,6 @@ drawPenTrailFor: aMorph from: oldPoint to: newPoint
 	r _ ((p1 rect: p2) expandBy: penSize + 1) translateBy: self topLeft.
 	self invalidRect: r.
 ! !
-
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 14:00'!
-drawPolygonFor: aSprite
-
-	| canvas verts poly |
-
-	verts _ {0@0 . 0@100 . 100@100}.
-	poly _ PolygonMorph vertices: verts color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
-		
-	self createOrResizeTrailsForm.
-	canvas _ FormCanvas on: penTrailsForm. 
-	poly drawOn: canvas.
-
-	self changed.! !
 
 !ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 16:00'!
 drawPolygonFor: aSprite points: aCollection

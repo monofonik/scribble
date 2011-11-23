@@ -374,6 +374,14 @@ drawCircle: aRadius
 	(stage _	self ownerThatIsA: ScratchStageMorph) ifNil: [ ^ self ].
 	^ stage drawCircleFor: self radius: aRadius! !
 
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/23/2011 14:53'!
+drawOvalWidth: w height: h
+
+	| stage |
+
+	(stage _	self ownerThatIsA: ScratchStageMorph) ifNil: [ ^ self ].
+	^ stage drawOvalFor: self width: w height: h! !
+
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/16/2011 10:21'!
 drawRectangle: aWidth by: aHeight
 
@@ -2480,7 +2488,7 @@ penShade
 ScratchSpriteMorph class
 	instanceVariableNames: ''!
 
-!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/22/2011 13:47'!
+!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/23/2011 14:59'!
 blockSpecs
 
 	| blocks |
@@ -2529,6 +2537,7 @@ blockSpecs
 			('set pen size to %n'				-	penSize: 1)
 			-
 			('circle radius %n'				-	drawCircle:)
+			('oval %n by %n'				-	drawOvalWidth:height:)
 			('rectangle %n by %n'			-	drawRectangle:by:)
 			-
 			('start shape'					-	shapeStart)

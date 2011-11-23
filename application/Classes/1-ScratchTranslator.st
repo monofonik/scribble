@@ -3,7 +3,7 @@ Object subclass: #ScratchTranslator
 	classVariableNames: 'ColonSuffix EllipsesSuffix HeaderString ISODict IsRTL IsRTLMath Language MIDITranslationSet RenderAntiAliasing RenderCenterOffsetCache RenderFont RenderHintString RenderPlugin RenderScale RenderSuppressBold RenderVerticalTrimCache RenderWithSqueak TranslationDict UITranslationSet '
 	poolDictionaries: ''
 	category: 'Scratch-Translation'!
-!ScratchTranslator commentStamp: 'jm 6/2/2008 15:11' prior: 0!
+!ScratchTranslator commentStamp: '<historical>' prior: 0!
 I manage language translations for Scratch. All of my code in in class methods.
 !
 

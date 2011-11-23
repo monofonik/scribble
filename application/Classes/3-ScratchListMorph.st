@@ -3,7 +3,7 @@ BorderedMorph subclass: #ScratchListMorph
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Scratch-UI-Watchers'!
-!ScratchListMorph commentStamp: 'jm 5/14/2008 10:59' prior: 0!
+!ScratchListMorph commentStamp: '<historical>' prior: 0!
 A scrollable, ordered list of editable strings.
 
 The following are top-level submorphs:

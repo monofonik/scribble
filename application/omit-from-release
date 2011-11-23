@@ -6,5 +6,7 @@ compile.sh
 copyforrelease.sh
 omit-from-release
 ScratchSkin
-Scribble Development.sh
+Scribble Development.*
+Scribble.exe
+Scribble.ini
 
