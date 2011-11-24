@@ -5,7 +5,7 @@ Name Scribble
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.0.1
+!define VERSION 0.0.3
 !define COMPANY "Monash University FIT"
 !define URL ""
 
@@ -42,7 +42,7 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile setup.exe
+OutFile "Scribble-${VERSION}.exe"
 InstallDir Scribble
 CRCCheck on
 XPStyle on

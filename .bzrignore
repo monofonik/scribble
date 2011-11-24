@@ -3,5 +3,8 @@ Scribble.image
 Scribble.changes
 .DS_Store
 *.dmg
+Scribble-*.exe
 deployment/mac/Scribble/*
 Icon*
+Thumbs.db
+Scribble Projects
