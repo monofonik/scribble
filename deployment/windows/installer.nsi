@@ -71,6 +71,10 @@ Section -Main SEC0000
     File ..\..\application\Scribble.exe
     File ..\..\application\Scribble.image
     File ..\..\application\Scribble.ini
+    CreateDirectory $INSTDIR\Projects
+    SetOutPath $INSTDIR\Projects
+    File ..\..\application\Projects\*.*
+    SetOutPath $INSTDIR
     SetOutPath $SMPROGRAMS\$StartMenuGroup
     CreateShortcut $SMPROGRAMS\$StartMenuGroup\Scribble.lnk $INSTDIR\Scribble.exe
     SetOutPath $DESKTOP
