@@ -19,7 +19,7 @@ The leftRight style is useful for side-views of things such as cars, horses, etc
 !
 
 
-!ScratchSpriteMorph methodsFor: 'initialization' stamp: 'JM 11/17/2011 10:20'!
+!ScratchSpriteMorph methodsFor: 'initialization' stamp: 'JM 11/24/2011 11:25'!
 initialize
 
 	super initialize.
@@ -31,7 +31,7 @@ initialize
 	offsetWhenRotated _ 0@0.			"offset for rotated form needed to keep rotation center invariant"
 	draggable _ false.
 	penDown _ false.
-	penSize _ 1.
+	penSize _ 2.
 	penHue _ 133.3.
 	penShade _ 50.
 	penGhosting _ 0.
@@ -39,8 +39,8 @@ initialize
 	fillShade _ 50.
 	fillGhosting _ 0.
 
-	self penColor: Color blue.
-	self fillColor: Color red.
+	self penColor: Color black.
+	self fillColor:  (Color r: 0.188 g: 0.435 b: 0.69).
 
 	pointsList _ nil.		
 	self extent: rotatedForm extent.
@@ -2488,7 +2488,7 @@ penShade
 ScratchSpriteMorph class
 	instanceVariableNames: ''!
 
-!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/23/2011 14:59'!
+!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/24/2011 11:11'!
 blockSpecs
 
 	| blocks |
@@ -2535,10 +2535,10 @@ blockSpecs
 			-
 			('change pen size by %n'		-	changePenSizeBy: 1)
 			('set pen size to %n'				-	penSize: 1)
-			-
-			('circle radius %n'				-	drawCircle:)
-			('oval %n by %n'				-	drawOvalWidth:height:)
-			('rectangle %n by %n'			-	drawRectangle:by:)
+		'shapes'
+			('circle radius %n'				-	drawCircle: 50)
+			('oval radius %n by %n'				-	drawOvalWidth:height: 80 50)
+			('rectangle %n by %n'			-	drawRectangle:by: 50 50)
 			-
 			('start shape'					-	shapeStart)
 			('end shape'						- 	shapeEnd)
