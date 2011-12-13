@@ -439,7 +439,7 @@ rootForGrabOf: aMorph
 ! !
 
 
-!ScratchStageMorph methodsFor: 'drawing' stamp: 'JM 11/8/2011 16:41'!
+!ScratchStageMorph methodsFor: 'drawing' stamp: 'JM 12/6/2011 16:25'!
 drawOn: aCanvas
 	"Draw myself if my visibility is > 0. If my visibility is 1, draw using the normal 'paint' mode. Otherwise, draw using 'alpha' resulting in a partially transparent rendering."
 
@@ -1072,6 +1072,23 @@ tryToOpenMidiPort
 ! !
 
 
+!ScratchStageMorph methodsFor: 'text support' stamp: 'JM 12/13/2011 16:13'!
+drawTextFor: aSprite s: aString
+
+	"draws the given string on the pen trails form, using the sprites font settings"
+
+	| o scanner |
+
+	self createOrResizeTrailsForm.
+	o _ (aSprite referencePosition x + 240)@(180 - aSprite referencePosition y).
+
+	scanner _ DisplayScanner quickPrintOn: penTrailsForm box: (0@0 corner: self extent) font: (StrikeFont fontName: aSprite fontName size: aSprite fontSize) color: aSprite penColor.
+	scanner drawString: aString at: o.
+
+	self changed.
+	! !
+
+
 !ScratchStageMorph methodsFor: 'pen support' stamp: 'jm 2/5/2005 11:31'!
 clearPenTrails
 	"Remove my pen trails Form. It will be recreated later if it is needed."
@@ -1190,27 +1207,6 @@ drawRectangleFor: aSprite width: aWidth height: aHeight
 	self changed.
 	
 	! !
-
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 15:29'!
-drawTriangleFor: aSprite lengths: anArray
-
-	"delete me"
-	| sorted canvas verts poly |
-
-	"first verify that a triangle can be formed"
-	anArray size ~= 3 ifTrue: [ self error: 'Expected 3 side lengths' ].
-	sorted _ anArray asSortedCollection.
-	(sorted at: 1 > (sorted at: 2) + (sorted at: 3))
-		ifTrue: [ self error: 'Supplied lengths cannot form a triangle'].
-	
-	verts _ {0@0 . 0@100 . 100@100}.
-	poly _ PolygonMorph vertices: verts color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
-		
-	
-	canvas _ FormCanvas on: penTrailsForm. 
-	poly drawOn: canvas.
-
-	self changed.! !
 
 !ScratchStageMorph methodsFor: 'pen support' stamp: 'jm 6/2/2009 18:50'!
 penTrailsForm
@@ -1914,7 +1910,7 @@ drawCircleFor: aSprite radius: aNumber
 	circle fillOval: (Rectangle origin: o corner: (o + d)) color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
 	self changed.! !
 
-!ScratchStageMorph methodsFor: 'drawing' stamp: 'JM 11/8/2011 16:41'!
+!ScratchStageMorph methodsFor: 'drawing' stamp: 'JM 12/6/2011 16:25'!
 drawOn: aCanvas
 	"Draw myself if my visibility is > 0. If my visibility is 1, draw using the normal 'paint' mode. Otherwise, draw using 'alpha' resulting in a partially transparent rendering."
 
@@ -2070,26 +2066,21 @@ drawSubmorphsOn: aCanvas
 
 ! !
 
-!ScratchStageMorph methodsFor: 'pen support' stamp: 'JM 11/16/2011 15:29'!
-drawTriangleFor: aSprite lengths: anArray
+!ScratchStageMorph methodsFor: 'text support' stamp: 'JM 12/13/2011 16:13'!
+drawTextFor: aSprite s: aString
 
-	"delete me"
-	| sorted canvas verts poly |
+	"draws the given string on the pen trails form, using the sprites font settings"
 
-	"first verify that a triangle can be formed"
-	anArray size ~= 3 ifTrue: [ self error: 'Expected 3 side lengths' ].
-	sorted _ anArray asSortedCollection.
-	(sorted at: 1 > (sorted at: 2) + (sorted at: 3))
-		ifTrue: [ self error: 'Supplied lengths cannot form a triangle'].
-	
-	verts _ {0@0 . 0@100 . 100@100}.
-	poly _ PolygonMorph vertices: verts color: aSprite fillColor borderWidth: aSprite penSize borderColor: aSprite penColor.
-		
-	
-	canvas _ FormCanvas on: penTrailsForm. 
-	poly drawOn: canvas.
+	| o scanner |
 
-	self changed.! !
+	self createOrResizeTrailsForm.
+	o _ (aSprite referencePosition x + 240)@(180 - aSprite referencePosition y).
+
+	scanner _ DisplayScanner quickPrintOn: penTrailsForm box: (0@0 corner: self extent) font: (StrikeFont fontName: aSprite fontName size: aSprite fontSize) color: aSprite penColor.
+	scanner drawString: aString at: o.
+
+	self changed.
+	! !
 
 !ScratchStageMorph methodsFor: 'drawing' stamp: 'jm 12/16/2006 12:21'!
 exportFileName: fileName

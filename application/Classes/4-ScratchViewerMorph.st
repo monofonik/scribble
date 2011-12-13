@@ -23,7 +23,7 @@ initialize
 	self extent: 214@500.
 ! !
 
-!ScratchViewerMorph methodsFor: 'initialization' stamp: 'JM 11/24/2011 11:05'!
+!ScratchViewerMorph methodsFor: 'initialization' stamp: 'JM 12/13/2011 11:19'!
 rebuildCategorySelectors
 
 	| catList maxExtent buttons label offForm onForm overForm b pad leftColumnX rightColumnX x y |
@@ -32,7 +32,7 @@ rebuildCategorySelectors
 		looks		sensing
 		sound		operators
 		pen			variables
-		shapes	).
+		shapes		text).
 
 	"First, delete the old category buttons"
 	submorphs do: [:m | (m isKindOf: ResizableToggleButton2) ifTrue: [m delete]].

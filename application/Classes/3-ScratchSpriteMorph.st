@@ -1,5 +1,5 @@
 ScriptableScratchMorph subclass: #ScratchSpriteMorph
-	instanceVariableNames: 'scalePoint rotationDegrees rotationStyle rotatedForm offsetWhenRotated draggable penDown penSize penColor penHue penShade penGhosting fillColor fillHue fillShade fillGhosting subsprites ownerSprite offset virtualScale rotateWithOwner refPos prototype pointsList moving '
+	instanceVariableNames: 'scalePoint rotationDegrees rotationStyle rotatedForm offsetWhenRotated draggable penDown penSize penColor penHue penShade penGhosting fillColor fillHue fillShade fillGhosting subsprites ownerSprite offset virtualScale rotateWithOwner refPos prototype pointsList moving fontName fontSize fontColor fontHue fontShade fontGhosting '
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Scratch-Objects'!
@@ -19,7 +19,7 @@ The leftRight style is useful for side-views of things such as cars, horses, etc
 !
 
 
-!ScratchSpriteMorph methodsFor: 'initialization' stamp: 'JM 11/24/2011 11:25'!
+!ScratchSpriteMorph methodsFor: 'initialization' stamp: 'JM 12/13/2011 16:49'!
 initialize
 
 	super initialize.
@@ -32,15 +32,17 @@ initialize
 	draggable _ false.
 	penDown _ false.
 	penSize _ 2.
-	penHue _ 133.3.
-	penShade _ 50.
+	"penHue _ 133.3.
+	penShade _ 50."
 	penGhosting _ 0.
-	fillHue _ 133.3.
-	fillShade _ 50.
+	"fillHue _ 133.3.
+	fillShade _ 50."
 	fillGhosting _ 0.
+	fontGhosting _ 0.
 
 	self penColor: Color black.
 	self fillColor:  (Color r: 0.188 g: 0.435 b: 0.69).
+	self fontColor: Color black.
 
 	pointsList _ nil.		
 	self extent: rotatedForm extent.
@@ -402,17 +404,6 @@ fillColor: aColor
 	self undeleteAttribute: #fillColor.
 	self passiveFillColor: aColor! !
 
-!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 14:03'!
-fillGhosting
-
-	| att |
-	att _ #fillGhosting.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-
-	^ fillGhosting! !
-
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'jens 2/10/2011 00:22'!
 penColor
 
@@ -443,17 +434,6 @@ penDown: aBoolean
 
 	self undeleteAttribute: #penDown.
 	self passivePenDown: aBoolean! !
-
-!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 14:04'!
-penGhosting
-
-	| att |
-	att _ #penGhosting.
-	self prototype ifNotNil: [
-		(self deletedAttributes includes: att) ifTrue: [
-			^ self prototype get: att]].
-
-	^ penGhosting! !
 
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'jm 2/5/2005 10:39'!
 penPosition
@@ -1383,13 +1363,13 @@ rightButtonMenu
 ! !
 
 
-!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 11/16/2011 15:34'!
+!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 12/13/2011 14:30'!
 fieldsVersion
 
-	^ 7
+	^ 8
 ! !
 
-!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 11/16/2011 15:35'!
+!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 12/13/2011 16:22'!
 initFieldsFrom: anObjStream version: classVersion
 
 	super initFieldsFrom: anObjStream version: classVersion.
@@ -1444,19 +1424,29 @@ initFieldsFrom: anObjStream version: classVersion
 
 	classVersion = 5 ifTrue: [ ^ self ].
 	"fields added in version 6"
-	self initFieldsNamed: #(
+	"self initFieldsNamed: #(
 		penGhosting
-	) from: anObjStream.
+	) from: anObjStream."
 
 	classVersion = 6 ifTrue: [ ^ self ].
 	"fields added in version 7"
-	self initFieldsNamed: #(
+	"self initFieldsNamed: #(
 		fillGhosting
 		pointsList
-	) from: anObjStream
+	) from: anObjStream."
+
+	classVersion = 7 ifTrue: [ ^ self ].
+	"fields added in version 8"
+	"self initFieldsNamed: #(
+		fillColor
+		fontName
+		fontSize
+		fontColor
+		fontGhosting
+	) from: anObjStream"
 ! !
 
-!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 11/16/2011 15:34'!
+!ScratchSpriteMorph methodsFor: 'object i/o' stamp: 'JM 12/13/2011 16:21'!
 storeFieldsOn: anObjStream
 
 	| oldP |
@@ -1484,9 +1474,11 @@ storeFieldsOn: anObjStream
 		refPos
 		prototype
 		deletedAttributes
-		penGhosting
+		"penGhosting
 		fillGhosting
-		pointsList
+		pointsList"
+		"fontName
+		fontSize"
 	) on: anObjStream.
 
 	self position: oldP.  "restore position"
@@ -2137,6 +2129,43 @@ passiveFillGhosting: aNumber
 	self propagate: #fillGhosting.
 ! !
 
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 12/13/2011 16:25'!
+passiveFontColor: aColor
+	"Set my font color."
+
+	| b |
+	fontColor _ aColor.
+	fontHue _ (fontColor hue * 200.0) / 360.0.
+	b _ fontColor brightness.
+	b = 1.0
+		ifTrue: [fontShade _ 50.0 + (50.0 * (1.0 - fontColor saturation))]
+		ifFalse: [fontShade _ 50.0 * b].
+
+	fontGhosting > 0 
+		ifTrue: [fontColor _ fontColor alpha: 1 - (fontGhosting / 100)].
+
+	self propagate: #fontColor
+! !
+
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 12/13/2011 16:27'!
+passiveFontGhosting: aNumber
+
+	fontGhosting _ (0 max: aNumber) min: 100.
+	fontGhosting > 0 
+		ifTrue: [ fontColor _ fontColor alpha: 1 - (fontGhosting / 100) ]
+		ifFalse: [ fontColor _ fontColor asNontranslucentColor ].
+
+	self propagate: #fontGhosting.
+! !
+
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 12/13/2011 16:32'!
+passiveFontName: aString
+
+	(StrikeFont fontNames contains: aString) ifFalse: [ ^ self ].	
+	fontName _ aString.
+
+	self propagate: #fontName.! !
+
 !ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'jens 2/8/2011 22:42'!
 passiveLookLike: costumeName
 
@@ -2240,7 +2269,7 @@ passiveSetFillHueTo: aNumber
 	self propagate: #fillColor
 ! !
 
-!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 11/15/2011 14:12'!
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 12/6/2011 16:44'!
 passiveSetFillShadeTo: aNumber
 	"Set the fill shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
 	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
@@ -2250,7 +2279,7 @@ passiveSetFillShadeTo: aNumber
 	fillColor _ Color h: (360.0 * fillHue) / 200.0 s: 1.0 v: 1.0.
 	normalizeShade _ fillShade > 100.0 ifTrue: [200.0 - fillShade] ifFalse: [fillShade].
 
-	normalizeShade = 50.0 ifTrue: [^ self].  "pure color"
+	"normalizeShade = 50.0 ifTrue: [^ self]."  "pure color"
 
 	scale _ 1.0 / 60.0.
 	k _ 1.0 - (50.0 * scale).
@@ -2264,6 +2293,47 @@ passiveSetFillShadeTo: aNumber
 
 	self propagate: #fillShade
 ! !
+
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 12/13/2011 16:28'!
+passiveSetFontHueTo: aNumber
+	"Set the font hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
+
+	fontHue _ aNumber asNumberNoError \\ 200.
+	self setFontShadeTo:  fontShade.  "compute and set penColor"
+
+	self propagate: #fontColor
+! !
+
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 12/13/2011 16:30'!
+passiveSetFontShadeTo: aNumber
+	"Set the fill shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
+	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
+
+	| normalizeShade scale k |
+	fontShade _ aNumber asNumberNoError asFloat \\ 200.0.
+	fontColor _ Color h: (360.0 * fontHue) / 200.0 s: 1.0 v: 1.0.
+	normalizeShade _ fontShade > 100.0 ifTrue: [200.0 - fontShade] ifFalse: [fontShade].
+
+	"normalizeShade = 50.0 ifTrue: [^ self]."  "pure color"
+
+	scale _ 1.0 / 60.0.
+	k _ 1.0 - (50.0 * scale).
+	normalizeShade < 50.0 ifTrue: [
+		fontColor _ fontColor mixed: (scale * normalizeShade) + k with: Color black].
+	normalizeShade > 50.0 ifTrue: [
+		fontColor _ fontColor mixed: 1.0 - (scale * (normalizeShade - 50.0)) with: Color white].
+
+	fontGhosting > 0 
+		ifTrue: [fontColor _ fontColor alpha: 1 - (fontGhosting / 100)].
+
+	self propagate: #fontShade
+! !
+
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 12/13/2011 16:34'!
+passiveSetFontSize: aNumber
+
+	fontSize _ (aNumber min: 48) max: 1.
+	self propagate: #fontSize.! !
 
 !ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'jens 2/9/2011 00:51'!
 passiveSetPenHueTo: aNumber
@@ -2439,6 +2509,17 @@ spawn
 	^ child	! !
 
 
+!ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 12/13/2011 16:37'!
+fillGhosting
+
+	| att |
+	att _ #fillGhosting.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
+
+	^ fillGhosting! !
+
 !ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 11/15/2011 13:11'!
 fillHue
 
@@ -2460,6 +2541,72 @@ fillShade
 			^ self prototype get: att]].
 
 	^ fillShade! !
+
+!ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 12/13/2011 16:36'!
+fontColor
+
+	| att |
+	att _ #fontColor.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
+
+	^ fontColor! !
+
+!ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 12/13/2011 16:37'!
+fontGhosting
+
+	| att |
+	att _ #fontGhosting.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
+
+	^ fontGhosting! !
+
+!ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 12/13/2011 16:36'!
+fontHue
+
+	| att |
+	att _ #fontHue.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
+
+	^ fontHue! !
+
+!ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 12/13/2011 16:36'!
+fontName
+
+	| att |
+	att _ #fontName.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
+
+	^ fontName! !
+
+!ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 12/13/2011 16:37'!
+fontShade
+
+	| att |
+	att _ #fontShade.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
+
+	^ fontShade! !
+
+!ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 12/13/2011 16:37'!
+penGhosting
+
+	| att |
+	att _ #penGhosting.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
+
+	^ penGhosting! !
 
 !ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'jens 2/10/2011 00:03'!
 penHue
@@ -2483,12 +2630,39 @@ penShade
 
 	^ penShade! !
 
+
+!ScratchSpriteMorph methodsFor: 'text' stamp: 'JM 12/13/2011 16:50'!
+fontColor: aColor
+
+	self undeleteAttribute: #fontColor.
+	self passiveFontColor: aColor.! !
+
+!ScratchSpriteMorph methodsFor: 'text' stamp: 'JM 12/13/2011 16:31'!
+fontName: aString
+
+	self undeleteAttribute: #fontName.
+	self passiveFontName: aString.! !
+
+!ScratchSpriteMorph methodsFor: 'text' stamp: 'JM 12/13/2011 16:33'!
+setFontSize: aNumber
+
+	self undeleteAttribute: #fontSize.
+	self passiveSetFontSize: aNumber.! !
+
+!ScratchSpriteMorph methodsFor: 'text' stamp: 'JM 12/13/2011 11:22'!
+writeText: aString
+
+	| stage |
+	stage _ (self ownerThatIsA: ScratchStageMorph) ifNil: [^ self].
+
+	stage drawTextFor: self s: aString.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 ScratchSpriteMorph class
 	instanceVariableNames: ''!
 
-!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 11/24/2011 11:11'!
+!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 12/13/2011 16:54'!
 blockSpecs
 
 	| blocks |
@@ -2547,11 +2721,28 @@ blockSpecs
 			('set fill color to %c'				-	fillColor:)
 			-
 			('change fill shade by %n'		-	changeFillShadeBy:)
-			('set fill shade to %n'			-	setFillShadeTo:)
+			('set fill shade to %n'			-	setFillShadeTo: 50)
 			-
 			('change fill ghosting by: %n'	-	changeFillGhostingBy:)
-			('set fill ghosting to: %n'		-	setFillGhostingTo:)
+			('set fill ghosting to: %n'		-	setFillGhostingTo: 50)
 			('stamp'							-	stampCostume)
+		'text'
+			('clear'							-	clearPenTrails)
+			-
+			('write %s'						-	writeText:)
+			-
+			('set font to %3'					-	fontName:)
+			('set font size to %n'				-	setFontSize: 12)
+			-
+			('change font color by %n'		-	changeFontColorBy:)
+			('set font color to %c'			-	setFontColor: )
+			-
+			('change font shade by %n'		-	changeFontShadeBy: )
+			('set font shade to %n'			-	setFontShadeTo: 50 )
+			-
+			('change font ghosting by %n'	-	changeFontGhostingBy: )
+			('set font ghosting to: %n'		-	setFontGhostingTo: 50 )
+
 	).
 
 	blocks _ blocks, #(
