@@ -19,7 +19,7 @@ The leftRight style is useful for side-views of things such as cars, horses, etc
 !
 
 
-!ScratchSpriteMorph methodsFor: 'initialization' stamp: 'JM 12/13/2011 16:49'!
+!ScratchSpriteMorph methodsFor: 'initialization' stamp: 'JM 1/16/2012 15:09'!
 initialize
 
 	super initialize.
@@ -43,6 +43,8 @@ initialize
 	self penColor: Color black.
 	self fillColor:  (Color r: 0.188 g: 0.435 b: 0.69).
 	self fontColor: Color black.
+	self fontName: #Aardvark.
+	self setFontSize: 12.
 
 	pointsList _ nil.		
 	self extent: rotatedForm extent.
@@ -2158,10 +2160,10 @@ passiveFontGhosting: aNumber
 	self propagate: #fontGhosting.
 ! !
 
-!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 12/13/2011 16:32'!
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 1/13/2012 14:36'!
 passiveFontName: aString
 
-	(StrikeFont fontNames contains: aString) ifFalse: [ ^ self ].	
+	(StrikeFont fontNames includes: aString) ifFalse: [ ^ self ].	
 	fontName _ aString.
 
 	self propagate: #fontName.! !
@@ -2597,6 +2599,17 @@ fontShade
 
 	^ fontShade! !
 
+!ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 1/13/2012 14:27'!
+fontSize
+
+	| att |
+	att _ #fontSize.
+	self prototype ifNotNil: [
+		(self deletedAttributes includes: att) ifTrue: [
+			^ self prototype get: att]].
+
+	^ fontSize! !
+
 !ScratchSpriteMorph methodsFor: 'BYOB attributes' stamp: 'JM 12/13/2011 16:37'!
 penGhosting
 
@@ -2637,7 +2650,7 @@ fontColor: aColor
 	self undeleteAttribute: #fontColor.
 	self passiveFontColor: aColor.! !
 
-!ScratchSpriteMorph methodsFor: 'text' stamp: 'JM 12/13/2011 16:31'!
+!ScratchSpriteMorph methodsFor: 'text' stamp: 'JM 1/13/2012 14:29'!
 fontName: aString
 
 	self undeleteAttribute: #fontName.
