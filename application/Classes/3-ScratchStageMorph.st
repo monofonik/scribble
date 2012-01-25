@@ -516,7 +516,7 @@ drawSubmorphsOn: aCanvas
 
 ! !
 
-!ScratchStageMorph methodsFor: 'drawing' stamp: 'jm 12/16/2006 12:21'!
+!ScratchStageMorph methodsFor: 'drawing' stamp: 'JM 1/25/2012 16:24'!
 exportFileName: fileName
 
 	| form fName |
@@ -525,7 +525,9 @@ exportFileName: fileName
 		(fileName asLowercase endsWith: '.gif')
 			ifTrue: [fName _ fileName]
 			ifFalse: [fName _ fileName, '.gif'].
-		GIFReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
+		"GIFReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
+		^ self"
+		PNGReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
 		^ self].
 
 	(fileName asLowercase endsWith: '.bmp')
@@ -690,27 +692,6 @@ stageShotForm
 	^ self stageShotSized: self width @ self height
 ! !
 
-!ScratchStageMorph methodsFor: 'drawing' stamp: 'tis 8/3/2006 15:55'!
-stageShotSized: size
-	"Answer a thumbnail of me and my submorphs. Use super fullDrawOn: to avoid drawing the shadows along the top and left edges of the workspace."
-
-	| canvas thumbForm |
-	canvas _ FormCanvas extent: bounds extent depth: 32.
-	canvas translateBy: bounds topLeft negated during: [:c | super fullDrawOn: c].
-	thumbForm _ Form extent: size depth: 32.
-	(WarpBlt toForm: thumbForm)
-		sourceForm: canvas form;
-		cellSize: 2;
-		combinationRule: Form over;
-		copyQuad: (0@0 extent: canvas extent) innerCorners toRect: thumbForm boundingBox.
-
-	thumbForm _ thumbForm colorReduced.  "first try to make a ColorForm with exact colors"
-	thumbForm depth > 8 ifTrue: [
-		thumbForm _ thumbForm asFormOfDepth: 8].  "if that fails, use the closest 8-bit colors"
-	^ thumbForm
-
-! !
-
 !ScratchStageMorph methodsFor: 'drawing' stamp: 'tis 8/3/2006 16:01'!
 thumbnailForm
 	"Answer a thumbnail of me and my submorphs."
@@ -807,6 +788,27 @@ removeTerminatedProcesses
 				ifFalse: [proc errorFlag ifFalse: [b stop]]]].
 
 	runningBlocks _ newRunning.
+! !
+
+!ScratchStageMorph methodsFor: 'scratch processes/events' stamp: 'JM 1/25/2012 16:33'!
+stageShotSized: size
+	"Answer a thumbnail of me and my submorphs. Use super fullDrawOn: to avoid drawing the shadows along the top and left edges of the workspace."
+
+	| canvas thumbForm |
+	canvas _ FormCanvas extent: bounds extent depth: 32.
+	canvas translateBy: bounds topLeft negated during: [:c | super fullDrawOn: c].
+	thumbForm _ Form extent: size depth: 32.
+	(WarpBlt toForm: thumbForm)
+		sourceForm: canvas form;
+		cellSize: 2;
+		combinationRule: Form over;
+		copyQuad: (0@0 extent: canvas extent) innerCorners toRect: thumbForm boundingBox.
+
+	"thumbForm _ thumbForm colorReduced."  "first try to make a ColorForm with exact colors"
+	"thumbForm depth > 8 ifTrue: [
+		thumbForm _ thumbForm asFormOfDepth: 8]. " "if that fails, use the closest 8-bit colors"
+	^ thumbForm
+
 ! !
 
 !ScratchStageMorph methodsFor: 'scratch processes/events' stamp: 'jm 6/4/2009 12:27'!
@@ -2082,7 +2084,7 @@ drawTextFor: aSprite s: aString
 	self changed.
 	! !
 
-!ScratchStageMorph methodsFor: 'drawing' stamp: 'jm 12/16/2006 12:21'!
+!ScratchStageMorph methodsFor: 'drawing' stamp: 'JM 1/25/2012 16:24'!
 exportFileName: fileName
 
 	| form fName |
@@ -2091,7 +2093,9 @@ exportFileName: fileName
 		(fileName asLowercase endsWith: '.gif')
 			ifTrue: [fName _ fileName]
 			ifFalse: [fName _ fileName, '.gif'].
-		GIFReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
+		"GIFReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
+		^ self"
+		PNGReadWriter putForm: form colorReduced8Bit onFileNamed: fName.
 		^ self].
 
 	(fileName asLowercase endsWith: '.bmp')
@@ -2856,7 +2860,7 @@ stageShotForm
 	^ self stageShotSized: self width @ self height
 ! !
 
-!ScratchStageMorph methodsFor: 'drawing' stamp: 'tis 8/3/2006 15:55'!
+!ScratchStageMorph methodsFor: 'scratch processes/events' stamp: 'JM 1/25/2012 16:33'!
 stageShotSized: size
 	"Answer a thumbnail of me and my submorphs. Use super fullDrawOn: to avoid drawing the shadows along the top and left edges of the workspace."
 
@@ -2870,9 +2874,9 @@ stageShotSized: size
 		combinationRule: Form over;
 		copyQuad: (0@0 extent: canvas extent) innerCorners toRect: thumbForm boundingBox.
 
-	thumbForm _ thumbForm colorReduced.  "first try to make a ColorForm with exact colors"
-	thumbForm depth > 8 ifTrue: [
-		thumbForm _ thumbForm asFormOfDepth: 8].  "if that fails, use the closest 8-bit colors"
+	"thumbForm _ thumbForm colorReduced."  "first try to make a ColorForm with exact colors"
+	"thumbForm depth > 8 ifTrue: [
+		thumbForm _ thumbForm asFormOfDepth: 8]. " "if that fails, use the closest 8-bit colors"
 	^ thumbForm
 
 ! !
