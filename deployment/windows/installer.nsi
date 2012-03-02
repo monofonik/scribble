@@ -5,7 +5,7 @@ Name Scribble
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.0.3
+!define VERSION 0.0.4
 !define COMPANY "Monash University FIT"
 !define URL ""
 
