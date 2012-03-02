@@ -334,6 +334,26 @@ changeFillShadeBy: aNumber
 	self setFillShadeTo: fillShade + aNumber.
 ! !
 
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 3/2/2012 10:28'!
+changeFontGhostingBy: aNumber
+
+	self setFontGhostingTo: fontGhosting + aNumber! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 3/2/2012 10:29'!
+changeFontHueBy: aNumber
+	"Change the font hue by given number."
+
+	self setFontHueTo: fontHue + aNumber.
+
+! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 3/2/2012 10:29'!
+changeFontShadeBy: aNumber
+	"Change the font shade (lightness) by given number"
+
+	self setFontShadeTo: fontShade + aNumber.
+! !
+
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 13:45'!
 changePenGhostingBy: aNumber
 
@@ -489,13 +509,34 @@ setFillHueTo: aNumber
 	self undeleteAttribute: #fillColor.
 	self passiveSetFillHueTo: aNumber! !
 
-!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 11/15/2011 13:48'!
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 3/2/2012 10:30'!
 setFillShadeTo: aNumber
 	"Set the fill shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
 	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
 
 	self undeleteAttribute: #fillShade.
 	self passiveSetFillShadeTo: aNumber! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 3/2/2012 10:30'!
+setFontGhostingTo: aNumber
+
+	self undeleteAttribute: #fontGhosting.
+	self passiveFontGhosting: aNumber! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 3/2/2012 10:30'!
+setFontHueTo: aNumber
+	"Set the fill hue to given number between 0 and 200. (That makes 100 the 'maximum' distance away from the original color on the color wheel.)"
+
+	self undeleteAttribute: #fontColor.
+	self passiveSetFontHueTo: aNumber! !
+
+!ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'JM 3/2/2012 10:30'!
+setFontShadeTo: aNumber
+	"Set the fill shade (lightness) to given number between 0 and 100. A shade of 0 is black, 100 is white, and 50 is fully saturated color."
+	"Details: We don't want to get all the way to pure black or white, so we divide the range 0..50 by a number > 50 when computing the fraction of the original color to mix with black or white."
+
+	self undeleteAttribute: #fontShade.
+	self passiveSetFontShadeTo: aNumber! !
 
 !ScratchSpriteMorph methodsFor: 'pen ops' stamp: 'jm 2/10/2008 22:20'!
 setPenColorFromCostumedNamed: costumeNameOrIndex x: x y: y
@@ -2331,10 +2372,10 @@ passiveSetFontShadeTo: aNumber
 	self propagate: #fontShade
 ! !
 
-!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 12/13/2011 16:34'!
+!ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'JM 3/2/2012 10:31'!
 passiveSetFontSize: aNumber
 
-	fontSize _ (aNumber min: 48) max: 1.
+	fontSize _ (aNumber min: 72) max: 1.
 	self propagate: #fontSize.! !
 
 !ScratchSpriteMorph methodsFor: 'byob OOP' stamp: 'jens 2/9/2011 00:51'!
@@ -2662,7 +2703,7 @@ setFontSize: aNumber
 	self undeleteAttribute: #fontSize.
 	self passiveSetFontSize: aNumber.! !
 
-!ScratchSpriteMorph methodsFor: 'text' stamp: 'JM 12/13/2011 11:22'!
+!ScratchSpriteMorph methodsFor: 'text' stamp: 'JM 3/2/2012 10:53'!
 writeText: aString
 
 	| stage |
@@ -2675,7 +2716,7 @@ writeText: aString
 ScratchSpriteMorph class
 	instanceVariableNames: ''!
 
-!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 12/13/2011 16:54'!
+!ScratchSpriteMorph class methodsFor: 'block specs' stamp: 'JM 3/2/2012 11:26'!
 blockSpecs
 
 	| blocks |
@@ -2722,7 +2763,11 @@ blockSpecs
 			-
 			('change pen size by %n'		-	changePenSizeBy: 1)
 			('set pen size to %n'				-	penSize: 1)
+			-
+			('stamp'							-	stampCostume)
 		'shapes'
+			('clear'							-	clearPenTrails)
+			-
 			('circle radius %n'				-	drawCircle: 50)
 			('oval radius %n by %n'				-	drawOvalWidth:height: 80 50)
 			('rectangle %n by %n'			-	drawRectangle:by: 50 50)
@@ -2738,7 +2783,6 @@ blockSpecs
 			-
 			('change fill ghosting by: %n'	-	changeFillGhostingBy:)
 			('set fill ghosting to: %n'		-	setFillGhostingTo: 50)
-			('stamp'							-	stampCostume)
 		'text'
 			('clear'							-	clearPenTrails)
 			-
@@ -2748,13 +2792,13 @@ blockSpecs
 			('set font size to %n'				-	setFontSize: 12)
 			-
 			('change font color by %n'		-	changeFontColorBy:)
-			('set font color to %c'			-	setFontColor: )
+			('set font color to %c'			-	fontColor: )
 			-
 			('change font shade by %n'		-	changeFontShadeBy: )
 			('set font shade to %n'			-	setFontShadeTo: 50 )
 			-
-			('change font ghosting by %n'	-	changeFontGhostingBy: )
-			('set font ghosting to: %n'		-	setFontGhostingTo: 50 )
+			"('change font ghosting by %n'	-	changeFontGhostingBy: )"
+			"('set font ghosting to: %n'		-	setFontGhostingTo: 50 )"
 
 	).
 

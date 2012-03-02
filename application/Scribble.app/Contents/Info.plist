@@ -348,7 +348,7 @@
 	<key>CFBundleExecutable</key>
 	<string>Scribble</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Scribble - Copyright 2011 Monash University FIT</string>
+	<string>Scribble - Copyright 2012 Monash University</string>
 	<key>CFBundleIconFile</key>
 	<string>Scribble.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -454,7 +454,7 @@
 	<key>SqueakPluginsBuiltInOrLocalOnly</key>
 	<true/>
 	<key>SqueakQuitOnQuitAppleEvent</key>
-	<false/>
+	<true/>
 	<key>SqueakTrustedDirectory</key>
 	<string>/foobar/tooBar/forSqueak/bogus/</string>
 	<key>SqueakUIFlushPrimaryDeferNMilliseconds</key>

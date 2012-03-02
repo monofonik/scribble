@@ -1074,7 +1074,7 @@ tryToOpenMidiPort
 ! !
 
 
-!ScratchStageMorph methodsFor: 'text support' stamp: 'JM 12/13/2011 16:13'!
+!ScratchStageMorph methodsFor: 'text support' stamp: 'JM 3/2/2012 10:46'!
 drawTextFor: aSprite s: aString
 
 	"draws the given string on the pen trails form, using the sprites font settings"
@@ -1084,7 +1084,7 @@ drawTextFor: aSprite s: aString
 	self createOrResizeTrailsForm.
 	o _ (aSprite referencePosition x + 240)@(180 - aSprite referencePosition y).
 
-	scanner _ DisplayScanner quickPrintOn: penTrailsForm box: (0@0 corner: self extent) font: (StrikeFont fontName: aSprite fontName size: aSprite fontSize) color: aSprite penColor.
+	scanner _ DisplayScanner quickPrintOnAlpha: penTrailsForm box: (0@0 corner: self extent) font: (StrikeFont fontName: aSprite fontName size: aSprite fontSize) color: aSprite fontColor.
 	scanner drawString: aString at: o.
 
 	self changed.
@@ -2068,7 +2068,7 @@ drawSubmorphsOn: aCanvas
 
 ! !
 
-!ScratchStageMorph methodsFor: 'text support' stamp: 'JM 12/13/2011 16:13'!
+!ScratchStageMorph methodsFor: 'text support' stamp: 'JM 3/2/2012 10:46'!
 drawTextFor: aSprite s: aString
 
 	"draws the given string on the pen trails form, using the sprites font settings"
@@ -2078,7 +2078,7 @@ drawTextFor: aSprite s: aString
 	self createOrResizeTrailsForm.
 	o _ (aSprite referencePosition x + 240)@(180 - aSprite referencePosition y).
 
-	scanner _ DisplayScanner quickPrintOn: penTrailsForm box: (0@0 corner: self extent) font: (StrikeFont fontName: aSprite fontName size: aSprite fontSize) color: aSprite penColor.
+	scanner _ DisplayScanner quickPrintOnAlpha: penTrailsForm box: (0@0 corner: self extent) font: (StrikeFont fontName: aSprite fontName size: aSprite fontSize) color: aSprite fontColor.
 	scanner drawString: aString at: o.
 
 	self changed.

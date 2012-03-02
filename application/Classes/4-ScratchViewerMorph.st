@@ -23,7 +23,7 @@ initialize
 	self extent: 214@500.
 ! !
 
-!ScratchViewerMorph methodsFor: 'initialization' stamp: 'JM 12/13/2011 11:19'!
+!ScratchViewerMorph methodsFor: 'initialization' stamp: 'JM 3/2/2012 11:30'!
 rebuildCategorySelectors
 
 	| catList maxExtent buttons label offForm onForm overForm b pad leftColumnX rightColumnX x y |
@@ -71,7 +71,7 @@ rebuildCategorySelectors
 
 	"calculate catButtonsExtent"
 	pad _ 15. "padding on left, right, and betwen the button columns"
-	catButtonsExtent _ ((2 * maxExtent x) + (3 * pad)) @ (((catList size // 2 + 1) * (maxExtent y + 6)) + 25).
+	catButtonsExtent _ ((2 * maxExtent x) + (3 * pad)) @ (((catList size // 2) * (maxExtent y + 6)) + 25).
 
 	"place the buttons"
 	leftColumnX _ self left + 12 + pad.

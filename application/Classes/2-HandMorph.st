@@ -1277,7 +1277,7 @@ newMorph
 	menu popUpForHand: self.
 ! !
 
-!HandMorph methodsFor: 'world menu' stamp: 'JM 11/10/2011 10:54'!
+!HandMorph methodsFor: 'world menu' stamp: 'JM 3/2/2012 11:32'!
 openMenu
 	"Build the open window menu for the world."
 
@@ -1295,7 +1295,7 @@ openMenu
 	menu add: 'mvc project' action: #openMVCProject.
 	menu add: 'morphic project' action: #openMorphicProject.
 	menu addLine.
-	menu add: 'Generator' action: #openScratchFrame.
+	menu add: 'Scribble' action: #openScratchFrame.
 	menu add: 'Elements' action: #openElementsBrowser.
 	^ menu
 ! !
