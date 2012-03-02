@@ -1,3 +1,5 @@
+Scribbe Copyright © 2012 Monash University. Based on Scratch.
+
 BYOB Copyright (c) 2010 Brian Harvey and Jens Moenig. Based on Scratch.
 Scratch
 
