@@ -513,18 +513,21 @@ workPane
 ! !
 
 
-!ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'jens 2/7/2011 23:35'!
+!ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'JM 4/19/2012 11:16'!
 aboutScratch
 
 	| dialogBox |
 	dialogBox _ DialogBoxMorph new
-		title: 'About BYOB';
+		title: 'About Scribble';
 		withButtonsForYes: false no: false okay: true cancel: false.
 	dialogBox
-		message: 'BYOB ', Version, '
-Build Your Own Blocks - an extension to Scratch
+		message: 'Scribble ', Version, '
+Scribble - Generative Art for Scratch
 
-Copyright 2011 Brian Harvey and Jens Moenig
+Copyright 2012 Monash University
+Developed by Jonathan Mullins j.mullins@gmx.com
+
+BYOB Copyright 2011 Brian Harvey and Jens Moenig
 bh@cs.berkeley.edu, jens@moenig.org
 All rights reserved
 
@@ -540,7 +543,7 @@ For more information, see http://byob.berkeley.edu
 http://scratch.mit.edu and http://chirp.scratchr.org.
 for license, see license.txt in folder.
 
-Please report bugs to http://byobugs.com.
+Please report BYOB bugs to http://byobugs.com.
 '
 		font: (ScratchFrameMorph getFont: #AboutScratch).
 
@@ -815,7 +818,7 @@ getLoginName
 	^ s
 ! !
 
-!ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'jens 7/7/2010 03:21'!
+!ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'JM 4/19/2012 11:18'!
 helpMenu: aMenuTitleMorph
 
 	| menu |
@@ -826,7 +829,7 @@ helpMenu: aMenuTitleMorph
 	menu add: 'Scratch Help Page' action: #launchHelpPage.
 	menu add: 'Help Screens' action: #launchAllHelpScreens.
 	menu addLine.
-	menu add: 'About BYOB' action: #aboutScratch.
+	menu add: 'About Scribble' action: #aboutScratch.
 
 	menu localize.
 
@@ -2048,13 +2051,13 @@ readDefaultNotes
 		DefaultNotes _ (FileStream oldFileNamed: 'defaultNotes.txt') contentsOfEntireFile].
 ! !
 
-!ScratchFrameMorph methodsFor: 'startup' stamp: 'jens 2/1/2010 01:26'!
+!ScratchFrameMorph methodsFor: 'startup' stamp: 'JM 3/2/2012 12:00'!
 readSettingsFile
 	"Read my settings file and answer a Dictionary of settings."
 	"ScratchFrameMorph new readSettingsFile"
 
 	| f dict s tokens k |
-	f _ FileStream readOnlyFileNamedOrNil: 'BYOB.ini'.
+	f _ FileStream readOnlyFileNamedOrNil: 'Scribble.ini'.
 	f ifNil: [^ Dictionary new].
 	dict _ Dictionary new.
 	f contentsOfEntireFile lines do: [:line |
@@ -3222,13 +3225,13 @@ rebuildUIForNewLanguage
 
 ! !
 
-!ScratchFrameMorph methodsFor: 'private' stamp: 'jens 2/1/2010 01:25'!
+!ScratchFrameMorph methodsFor: 'private' stamp: 'JM 3/2/2012 12:00'!
 recordLanguage: aString
 	"Record my language in the settings file."
 	"ScratchFrameMorph new recordLanguage: 'English'"
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
@@ -3566,13 +3569,13 @@ randomProjectName
 	projects size > 0 ifTrue: [^ dir fullNameFor: (projects asArray at: Random new next * projects size + 1)].
 	^ nil! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 2/1/2010 01:31'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 3/2/2012 12:00'!
 recordBlockContrast: anInteger
 	"Record my language in the settings file."
 	"ScratchFrameMorph new recordLanguage: 'English'"
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
@@ -3586,12 +3589,12 @@ recordBlockContrast: anInteger
 	f close.
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 2/1/2010 01:35'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 3/2/2012 12:00'!
 recordKeepOnStage: anInteger
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
@@ -3605,12 +3608,12 @@ recordKeepOnStage: anInteger
 	f close.
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 8/2/2010 23:25'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 3/2/2012 12:00'!
 recordScopeContrast: anInteger
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
@@ -3624,12 +3627,12 @@ recordScopeContrast: anInteger
 	f close.
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 6/9/2010 22:29'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 3/2/2012 12:00'!
 recordThreadSafeMode: anInteger
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
@@ -3643,12 +3646,12 @@ recordThreadSafeMode: anInteger
 	f close.
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 7/13/2010 23:06'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 3/2/2012 12:01'!
 recordTranslucentDragging: anInteger
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
@@ -3839,18 +3842,21 @@ versionControlImport
 	self class versionControlDirectory fileInContents! !
 
 
-!ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'jens 2/7/2011 23:35'!
+!ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'JM 4/19/2012 11:16'!
 aboutScratch
 
 	| dialogBox |
 	dialogBox _ DialogBoxMorph new
-		title: 'About BYOB';
+		title: 'About Scribble';
 		withButtonsForYes: false no: false okay: true cancel: false.
 	dialogBox
-		message: 'BYOB ', Version, '
-Build Your Own Blocks - an extension to Scratch
+		message: 'Scribble ', Version, '
+Scribble - Generative Art for Scratch
 
-Copyright 2011 Brian Harvey and Jens Moenig
+Copyright 2012 Monash University
+Developed by Jonathan Mullins j.mullins@gmx.com
+
+BYOB Copyright 2011 Brian Harvey and Jens Moenig
 bh@cs.berkeley.edu, jens@moenig.org
 All rights reserved
 
@@ -3866,7 +3872,7 @@ For more information, see http://byob.berkeley.edu
 http://scratch.mit.edu and http://chirp.scratchr.org.
 for license, see license.txt in folder.
 
-Please report bugs to http://byobugs.com.
+Please report BYOB bugs to http://byobugs.com.
 '
 		font: (ScratchFrameMorph getFont: #AboutScratch).
 
@@ -5210,7 +5216,7 @@ handlesMouseDown: evt
 	^ true
 ! !
 
-!ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'jens 7/7/2010 03:21'!
+!ScratchFrameMorph methodsFor: 'menu/button actions' stamp: 'JM 4/19/2012 11:18'!
 helpMenu: aMenuTitleMorph
 
 	| menu |
@@ -5221,7 +5227,7 @@ helpMenu: aMenuTitleMorph
 	menu add: 'Scratch Help Page' action: #launchHelpPage.
 	menu add: 'Help Screens' action: #launchAllHelpScreens.
 	menu addLine.
-	menu add: 'About BYOB' action: #aboutScratch.
+	menu add: 'About Scribble' action: #aboutScratch.
 
 	menu localize.
 
@@ -6249,13 +6255,13 @@ readDefaultNotes
 		DefaultNotes _ (FileStream oldFileNamed: 'defaultNotes.txt') contentsOfEntireFile].
 ! !
 
-!ScratchFrameMorph methodsFor: 'startup' stamp: 'jens 2/1/2010 01:26'!
+!ScratchFrameMorph methodsFor: 'startup' stamp: 'JM 3/2/2012 12:00'!
 readSettingsFile
 	"Read my settings file and answer a Dictionary of settings."
 	"ScratchFrameMorph new readSettingsFile"
 
 	| f dict s tokens k |
-	f _ FileStream readOnlyFileNamedOrNil: 'BYOB.ini'.
+	f _ FileStream readOnlyFileNamedOrNil: 'Scribble.ini'.
 	f ifNil: [^ Dictionary new].
 	dict _ Dictionary new.
 	f contentsOfEntireFile lines do: [:line |
@@ -6282,13 +6288,13 @@ rebuildUIForNewLanguage
 
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 2/1/2010 01:31'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 3/2/2012 12:00'!
 recordBlockContrast: anInteger
 	"Record my language in the settings file."
 	"ScratchFrameMorph new recordLanguage: 'English'"
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
@@ -6302,12 +6308,12 @@ recordBlockContrast: anInteger
 	f close.
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 2/1/2010 01:35'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 3/2/2012 12:00'!
 recordKeepOnStage: anInteger
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
@@ -6321,13 +6327,13 @@ recordKeepOnStage: anInteger
 	f close.
 ! !
 
-!ScratchFrameMorph methodsFor: 'private' stamp: 'jens 2/1/2010 01:25'!
+!ScratchFrameMorph methodsFor: 'private' stamp: 'JM 3/2/2012 12:00'!
 recordLanguage: aString
 	"Record my language in the settings file."
 	"ScratchFrameMorph new recordLanguage: 'English'"
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
@@ -6341,12 +6347,12 @@ recordLanguage: aString
 	f close.
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 8/2/2010 23:25'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 3/2/2012 12:00'!
 recordScopeContrast: anInteger
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
@@ -6360,12 +6366,12 @@ recordScopeContrast: anInteger
 	f close.
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 6/9/2010 22:29'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 3/2/2012 12:00'!
 recordThreadSafeMode: anInteger
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
@@ -6379,12 +6385,12 @@ recordThreadSafeMode: anInteger
 	f close.
 ! !
 
-!ScratchFrameMorph methodsFor: 'byob' stamp: 'jens 7/13/2010 23:06'!
+!ScratchFrameMorph methodsFor: 'byob' stamp: 'JM 3/2/2012 12:01'!
 recordTranslucentDragging: anInteger
 	"Record a setting in the settings file."
 
 	| fName f sz settings all |
-	fName _ FileDirectory default fullNameFor: 'BYOB.ini'.
+	fName _ FileDirectory default fullNameFor: 'Scribble.ini'.
 	f _ FileStream concreteStream new open: fName forWrite: true.
 	f ifNil: [^ self].
 	sz _ f size.
