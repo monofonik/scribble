@@ -13,7 +13,7 @@
 #shift
 
 DEST="../deployment/mac/Scribble/"
-rsync -a ./ $DEST --delete --exclude-from=../.bzrignore --exclude-from=omit-from-release $@
+rsync -a ./ $DEST --delete --exclude-from=../.gitignore --exclude-from=omit-from-release $@
 cp ./Scribble.image $DEST
-cp ./Icon* $DEST
+#cp ./Icon* $DEST
 echo "Completed - Files in $DEST are up to date."
