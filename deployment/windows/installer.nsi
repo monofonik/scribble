@@ -5,7 +5,7 @@ Name Scribble
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.0.5
+!define VERSION 0.0.6
 !define COMPANY "Monash University FIT"
 !define URL ""
 
@@ -71,6 +71,8 @@ Section -Main SEC0000
     File ..\..\application\Scribble.exe
     File ..\..\application\Scribble.image
     File ..\..\application\Scribble.ini
+    File ..\..\application\ScratchPlugin.dll
+    File ..\..\application\SystemPlugin.dll 
     CreateDirectory $INSTDIR\Projects
     SetOutPath $INSTDIR\Projects
     File ..\..\application\Projects\*.*
