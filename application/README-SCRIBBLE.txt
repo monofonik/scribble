@@ -5,8 +5,9 @@ SCRIBBLE - DEVELOPMENT README
 Configuring
 
 - Copy BaseScribble.image and BaseScribble.changes to Scribble.image and Scribble.changes
-- Run cellular_development (Mac) or cellular_development.bat (Windows)
+- Run scribble_development (Mac) or scribble_development.bat (Windows)
 - Follow instructions within Squeak Image to import classes from version control
+	- also need to right click scratch window, close and re-open to see some interface changes
 
 During development, left-click the background and select Save to save the current state of the Squeak image. Note that the base image (BaseScribble.image / BaseScribble.changes) should not be modified, in order to prevent the need for committing large files to version control.
 
@@ -17,7 +18,7 @@ Exporting to version control
 
 Releasing
 
-- In the Squeak class browser, select "ScratchFrameMorph - Class - All - version:"
+- In the Squeak class browser, select "Scratch-UI-Panes - ScratchFrameMorph - Class - All - version:"
 - Uncomment the first line of text, increment the version number
 - Select the first line of text, press <Ctrl> D
 - Re-comment the first line of text
