@@ -5,7 +5,7 @@ Name Scribble
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.0.6
+!define VERSION 0.0.7
 !define COMPANY "Monash University FIT"
 !define URL ""
 
@@ -42,12 +42,13 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile "Scribble-${VERSION}.exe"
+#OutFile "Scribble-${VERSION}.exe"
+OutFile "C:\Users\Jono\Desktop\Scribble-${VERSION}.exe"
 InstallDir Scribble
 CRCCheck on
 XPStyle on
 ShowInstDetails hide
-VIProductVersion 0.0.1.0
+VIProductVersion ${VERSION}.0
 VIAddVersionKey ProductName Scribble
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
@@ -59,26 +60,9 @@ ShowUninstDetails hide
 
 # Installer sections
 Section -Main SEC0000
-    SetOutPath $INSTDIR
+       SetOutPath $INSTDIR
     SetOverwrite on
-    File ..\..\application\SqueakV2.sources
-    File "..\..\application\BYOB 2.0.pdf"
-    File ..\..\application\BYOBManual.pdf
-    File ..\..\application\license.txt
-    File ..\..\application\README-BYOB.txt
-    File ..\..\application\README-SCRATCH.txt
-    File ..\..\application\Scribble.changes
-    File ..\..\application\Scribble.exe
-    File ..\..\application\Scribble.image
-    File ..\..\application\Scribble.ini
-    File ..\..\application\ScratchPlugin.dll
-    File ..\..\application\SystemPlugin.dll 
-    CreateDirectory $INSTDIR\Projects
-    SetOutPath $INSTDIR\Projects
-    File ..\..\application\Projects\*.*
-    CreateDirectory $INSTDIR\Projects\Tutorials
-    SetOutPath $INSTDIR\Projects\Tutorials
-    File ..\..\application\Projects\Tutorials\*.*
+    File /r /x Base* /x Scribble.app /x scribble_development /x Classes /x copyforrelease.sh /x omit-from-release /x ScratchSkin /x .DS_Store /x Icon* ..\..\application\*
     SetOutPath $INSTDIR
     SetOutPath $SMPROGRAMS\$StartMenuGroup
     CreateShortcut $SMPROGRAMS\$StartMenuGroup\Scribble.lnk $INSTDIR\Scribble.exe
@@ -119,16 +103,10 @@ done${UNSECTION_ID}:
 Section /o -un.Main UNSEC0000
     Delete /REBOOTOK $DESKTOP\Scribble.lnk
     Delete /REBOOTOK $SMPROGRAMS\$StartMenuGroup\Scribble.lnk
-    Delete /REBOOTOK $INSTDIR\Scribble.ini
-    Delete /REBOOTOK $INSTDIR\Scribble.image
-    Delete /REBOOTOK $INSTDIR\Scribble.exe
-    Delete /REBOOTOK $INSTDIR\Scribble.changes
-    Delete /REBOOTOK $INSTDIR\README-SCRATCH.txt
-    Delete /REBOOTOK $INSTDIR\README-BYOB.txt
-    Delete /REBOOTOK $INSTDIR\license.txt
-    Delete /REBOOTOK $INSTDIR\BYOBManual.pdf
-    Delete /REBOOTOK "$INSTDIR\BYOB 2.0.pdf"
-    Delete /REBOOTOK $INSTDIR\SqueakV2.sources
+    Rename "$INSTDIR\Projects" "$PLUGINSDIR\Projects"
+    RMDir /R $INSTDIR
+    CreateDirectory $INSTDIR
+    Rename "$PLUGINSDIR\Projects" "$INSTDIR\Projects"
     DeleteRegValue HKLM "${REGKEY}\Components" Main
 SectionEnd
 
